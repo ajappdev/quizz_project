@@ -9,7 +9,6 @@ function numberWithCommas(x, relplace_with)
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, relplace_with);
 }
 
-
 function getCookie(c_name)
 {
     if (document.cookie.length > 0)

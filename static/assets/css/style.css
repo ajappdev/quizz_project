@@ -66,6 +66,14 @@ body
 
 }
 
+.add_button_settings
+{
+  float: right;
+  position: absolute;
+  right: 20px;
+  top: 20px;
+}
+
 body {
     margin-top: 0;
     padding: 0;
