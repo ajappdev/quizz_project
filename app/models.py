@@ -109,7 +109,7 @@ class Question(models.Model):
         return str(self.question)
 
 
-class Choices(models.Model):
+class Choice(models.Model):
     """
     Here we store all the choices for questions that take multiple choices
     as answer
@@ -122,3 +122,16 @@ class Choices(models.Model):
 
     def __str__(self):
         return self.choice
+
+class Answer(models.Model):
+    """
+    Here we store the right answers for questions
+    """
+    answer = models.CharField(
+        max_length=300, null=True, blank=True)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.answer
