@@ -4,83 +4,82 @@ import app.models as am
 # Declaring variables
 questions_types = [
     "Multiple Choices",
-    "Unique choice",
     "True or False",
     "Free Text"]
 
-def create_question(
-        question_type: str,
+def check_question(question_type: str,
         choices_list: list,
         right_answer: str,
         country: str,
         category: str,
         question: str,
         region: str,
-        sub_category: str
-    ):
+        sub_category: str):
+
+    error_return = ""
 
     # Check if the question was provided
     if question == "":
-        pass
+        error_return = "The question cannot be empty!"
 
     # Check if the answer was provided
     elif right_answer == "":
-        pass
+        error_return = "The answer cannot be empty!"
 
     # Check if a the type of the question is valid
     elif question_type.lower() not in [q.lower() for q in questions_types]:
-        pass
+        error_return = "The answer does not figure among the provided choices!"
 
     # Check if a free text question was provided with choices
     elif len(choices_list) > 0 and question_type == "Free Text":
-        pass
+        error_return = "A free text question cannot be provided with a choice!"
 
     # Check if a true/false question was provided but the choices list contain
     # more than two options
     elif question_type == "True or False" and len(choices_list) > 2:
-        pass
+        error_return = "A true/false question cannot be provided with more than 2 choices!"
 
     # Check if a true/false question was provided but neither true or false
     # figure in the lise of choices
     elif question_type == "True or False" and (
-        'true' not in [c.lower() for c in choices_list] or
-        'false' not in [c.lower() for c in choices_list]):
-        pass
+            'true' not in [c.lower() for c in choices_list] or
+            'false' not in [c.lower() for c in choices_list]):
+        error_return = "A true/false question was provided but neither true nor false is in the list of choices!"
 
     # Check if a true/false question was provided but neither true or false
     # figure in the right answer
     elif question_type == "True or False" and\
-        right_answer.lower() != 'right' and right_answer.lower() != 'false':
-        pass
+            right_answer.lower() != 'right' and right_answer.lower() != 'false':
+        error_return = "A true/false question was provided but either true or false was not provided!"
 
-    # Check if a multiple/unique choice question was provided but the choices 
+    # Check if a multiple choices question was provided but the choices 
     # list contains less than 2 options
-    elif question_type in ["True or False", "Multiple Choices"] and\
+    elif question_type == "Multiple Choices" and\
             len(choices_list) < 2:
-        pass
+        error_return = "A multiple choices question was provided but the choices list contains less than 2 options!"
 
-    # Check if a multiple/unique choice question was provided but the right
+    # Check if a multiple choices question was provided but the right
     # answer does not figure in the list of choices
-    elif question_type in ["True or False", "Multiple Choices"] and\
+    elif question_type == "Multiple Choices" and\
             right_answer not in choices_list:
-        pass
+        error_return = "A multiple choices question was provided but the answer does not figure in the list of choices!"
 
     # Check if the country was provided and exists
-    elif country == "" or len(am.Country.objects.filter(name=country)) == 0:
-        pass
+    elif len(am.Country.objects.filter(name=country)) == 0:
+        error_return = "The country does not exist!"
 
     # Check if the country was provided and exists
-    elif region == "" or len(am.Region.objects.filter(name=region)) == 0:
-        pass
+    elif len(am.Region.objects.filter(name=region)) == 0:
+        error_return = "The region does not exist!"
 
     # Check if the country was provided and exists
-    elif category == "" or len(am.Category.objects.filter(name=category)) == 0:
-        pass
+    elif len(am.Category.objects.filter(name=category)) == 0:
+        error_return = "The category does not exist!"
 
     # Check if the country was provided and exists
-    elif sub_category == "" or len(
+    elif len(
             am.SubCategory.objects.filter(name=sub_category)) == 0:
-        pass
+        error_return = "The sub category does not exist!"
 
     # Check if a all elements are provided and are valid  
     else:
@@ -94,27 +93,54 @@ def create_question(
 
         for k, v in elements_dict.items():
             if v == "":
-                pass
-                return
+                error_return = "The " + str(k) + " cannot be empty!"
 
-    # Create the question 
-    new_question = am.Question()
-    new_question.category = am.Category.objects.filter(name=category)[0]
-    new_question.country = am.Country.objects.filter(name=country)[0]
-    new_question.region = am.Region.objects.filter(name=region)[0]
-    new_question.sub_category = am.SubCategory.objects.filter(
-        name=sub_category)[0]
-    new_question.question = question
-    new_question.type = question_type
-    new_question.save()
+    return error_return
 
-    new_answer = am.Answer()
-    new_answer.answer = right_answer
-    new_answer.question = new_question
-    new_answer.save()
+def create_question(
+        question_type: str,
+        choices_list: list,
+        right_answer: str,
+        country: str,
+        category: str,
+        question: str,
+        region: str,
+        sub_category: str
+    ):
 
-    for choice in choices_list:
-        new_choice = am.Choice()
-        new_choice.choice = choice
-        new_choice.question = new_question
-        new_choice.save()
+    check = check_question(question_type,
+        choices_list,
+        right_answer,
+        country,
+        category,
+        question,
+        region,
+        sub_category)
+
+    if check == "":
+        # Create the question 
+        new_question = am.Question()
+        new_question.category = am.Category.objects.filter(name=category)[0]
+        new_question.country = am.Country.objects.filter(name=country)[0]
+        new_question.region = am.Region.objects.filter(name=region)[0]
+        new_question.sub_category = am.SubCategory.objects.filter(
+            name=sub_category)[0]
+        new_question.question = question
+        new_question.type = question_type
+        new_question.save()
+
+        new_answer = am.Answer()
+        new_answer.answer = right_answer
+        new_answer.question = new_question
+        new_answer.save()
+
+        for choice in choices_list:
+            new_choice = am.Choice()
+            new_choice.choice = choice
+            new_choice.question = new_question
+            new_choice.save()
+        
+        return "OK"
+
+    else:
+        return check

@@ -88,7 +88,7 @@ def update_question(request, pk: int):
 
 
 def questions(request):
-    template = 'questions/index.html'
+    template = 'administrator/questions.html'
 
     success_message = request.GET.get('success_message')
     if success_message == "creation":
