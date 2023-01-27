@@ -1,0 +1,292 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+{% load i18n %}
+{% load humanize %}
+
+
+
+<div class="container">
+
+        <div class="row">
+            <div class="col-lg-12 col-12 col-md-12 mb-5">
+                <input id="add_question_field_question" class="add_question_field form-control" placeholder="{% trans 'Example: What is the capital of France?' %}">
+            </div>
+            <div class="col-lg-3 col-12 col-md-12 mb-5">
+                <select id="add_question_field_region" class="add_question_field form-control">
+                    <option disabled selected value="">{% trans 'Region' %}</option>
+                    {% for region in regions %}
+                        <option value="{{region.id|safe}}">{{region}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-lg-3 col-12 col-md-12 mb-5">
+                <select id="add_question_field_country" class="add_question_field form-control">
+                    <option disabled selected value="">{% trans 'Country' %}</option>
+                    {% for country in countries %}
+                        <option value="{{country.id|safe}}">{{country}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-lg-3 col-12 col-md-12 mb-5">
+                <select id="add_question_field_category" class="add_question_field form-control">
+                    <option disabled selected value="">{% trans 'Category' %}</option>
+                    {% for category in categories %}
+                        <option value="{{category.id|safe}}">{{category}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-lg-3 col-12 col-md-12 mb-5">
+                <select id="add_question_field_sub_category" class="add_question_field form-control">
+                    <option disabled selected value="">{% trans 'Sub category' %}</option>
+                    {% for sub_category in sub_categories %}
+                        <option value="{{sub_category.id|safe}}">{{sub_category}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-lg-4 col-12 col-md-12 mb-5">
+                <div class="add_question_type_frame" id="freetext_div">{% trans 'Free Text' %}</div>
+            </div>
+
+            <div class="col-lg-4 col-12 col-md-12 mb-5">
+                <div class="add_question_type_frame" id="truefalse_div">{% trans 'True or False' %}</div>
+            </div>
+
+            <div class="col-lg-4 col-12 col-md-12 mb-5">
+                <div class="add_question_type_frame" id="multiplechoices_div">{% trans 'Multiple Choices' %}</div>
+            </div>
+            
+            <div style="display:none;" class="row" id="choices_div">
+                <div class="col-lg-2 col-12 col-md-12 mb-3">
+                    <label class="form-label">{% trans 'Choice 1' %}</label>
+                    <input id="add_question_field_choice1" class="add_question_choice form-control" placeholder="{% trans 'Example: Paris' %}">
+                </div>
+                <div class="col-lg-2 col-12 col-md-12 mb-3">
+                    <label class="form-label">{% trans 'Choice 2' %}</label>
+                    <input id="add_question_field_choice2" class="add_question_choice form-control" placeholder="{% trans 'Example: Madrid' %}">
+                </div>
+                <div class="col-lg-2 col-12 col-md-12 mb-3">
+                    <label class="form-label">{% trans 'Choice 3' %}</label>
+                    <input id="add_question_field_choice3" class="add_question_choice form-control" placeholder="{% trans 'Example: Lisboa' %}">
+                </div>
+                <div class="col-lg-2 col-12 col-md-12 mb-3">
+                    <label class="form-label">{% trans 'Choice 4' %}</label>
+                    <input id="add_question_field_choice4" class="add_question_choice form-control" placeholder="{% trans 'Example: Berlin' %}">
+                </div>
+                <div class="col-lg-2 col-12 col-md-12 mb-3">
+                    <label class="form-label">{% trans 'Choice 5' %}</label>
+                    <input id="add_question_field_choice5" class="add_question_choice form-control" placeholder="{% trans 'Example: London' %}">
+                </div>
+                <div class="col-lg-2 col-12 col-md-12 mb-3">
+                    <label class="form-label">{% trans 'Choice 6' %}</label>
+                    <input id="add_question_field_choice6" class="add_question_choice form-control" placeholder="{% trans 'Example: Dublin' %}">
+                </div>
+            </div>
+            <div style="display:none;" id="free_text_answer">
+                <div class="col-lg-12 col-12 col-md-12 mb-5">
+                    <label class="form-label">{% trans 'Answer' %}</label>
+                    <textarea style="resize: none;" class="form-control" placeholder="{% trans 'Example: The capital of France is Paris' %}"></textarea>
+                </div>
+            </div>
+                
+            <div style="display:none;" id="choices_answer">
+                <div class="col-lg-12 col-12 col-md-12 mb-5">
+                    <label class="form-label">{% trans 'Answer' %}</label>
+                    <select id="choices_select" class="form-control">
+                        <option disabled selected value=""></option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="text-align:center">
+                <button id="save_question_button" class="btn btn-lg btn-success"><i class="fas fa-save"></i> {% trans 'SAVE QUESTION' %}</button>
+            </div>
+
+        </div>
+
+</div>
+
+
+<script
+  src="https://code.jquery.com/jquery-3.6.1.js"
+  integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
+  crossorigin="anonymous"></script>
+<script>
+
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+/////////////////////////////AT LOAD//////////////////////
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+
+selected_type = ""
+
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+///////////////////WHEN DOM IS READY//////////////////////
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+
+$( document ).ready(function() {
+
+
+
+
+
+
+
+});
+
+
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+////////////////////////CLICK EVENTS//////////////////////
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+
+
+
+$(document).on("click", "#save_question_button", function() {
+
+
+
+});
+
+$(document).on("click", ".add_question_type_frame", function() {
+
+    $(".add_question_type_frame").css("border", "3px solid #41b6c5");
+    $(".add_question_type_frame").css("color", "#561616");
+    $(".add_question_type_frame").css("background", "white");
+
+    $(this).css("border", "3px solid white");
+    $(this).css("color", "white");
+    $(this).css("background", "#41b6c5");
+
+    selected_type = $(this).attr("id").split("_")[0];
+    
+    if (selected_type == "freetext")
+    {
+        $("#free_text_answer").show("");
+        $("#choices_div").hide("");
+        $("#choices_answer").hide("");
+
+        $( ".add_question_choice" ).each(function( index ) {
+            $(this).val("")
+            $(this).attr("value", "")
+        });
+        fill_choices()
+
+    }else if (selected_type == "truefalse")
+    {
+        $("#choices_answer").show("");
+        $("#choices_div").hide("");
+        $("#free_text_answer").hide("");
+
+
+        $( ".add_question_choice" ).each(function( index ) {
+            $(this).val("")
+            $(this).attr("value", "")
+        });
+        fill_choices()
+
+        $("#choices_select").html(`
+        <option disabled selected value=""></option>
+        <option value="True">{% trans 'True' %}</option>
+        <option value="False">{% trans 'False' %}</option>
+        `
+        )
+
+
+    }else if (selected_type == "multiplechoices")
+    {
+        $("#choices_div").show("");
+        $("#choices_answer").show("");
+        $("#free_text_answer").hide("");
+
+        fill_choices()
+
+    }else
+    {
+
+    }
+});
+
+
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+////////////////////////CLICK EVENTS//////////////////////
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+
+$(document).on("keyup", ".add_question_choice", function() {
+    fill_choices()
+});
+
+
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+////////////////////////CLICK EVENTS//////////////////////
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+
+function fill_choices()
+{
+    array_choices = []
+
+    $( ".add_question_choice" ).each(function( index ) {
+        if ($(this).val() != "")
+        {
+            array_choices.push($(this).val());
+        }
+    });
+
+    html_options = `<option disabled selected value=""></option>`
+
+    for (i=0; i<array_choices.length; i++)
+    {
+        html_options = html_options + `<option value="` + array_choices[i] + `">` + array_choices[i] + `</option>`
+    }
+
+    $("#choices_select").html(html_options)
+
+}
+
+</script>
+
+<style>
+
+.add_question_field
+{
+    font-size:1.5em;
+}
+
+.add_question_type_frame
+{
+    border: 3px solid #41b6c5;
+    height: 100px;
+    width: 100%;
+    line-height: 94px;
+    text-align: center;
+    cursor: pointer;
+    color: #561616;
+    border-radius: 10px;
+    background: white;
+    font-weight: 600;
+    font-size: 1.2em;
+}
+
+.add_question_type_frame:hover
+{
+    border: 3px solid white;
+    color: white;
+    background: #41b6c5;
+}
+
+input, select
+{
+    border: 1px solid #41b6c5 !important;
+}
+
+</style>
+
+{% endblock %}

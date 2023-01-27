@@ -75,8 +75,19 @@ def admin_settings(request):
 
 
 def add_question(request):
-    template = 'administrator/add-question.html'
-    context = {}
+
+    regions = am.Region.objects.all()
+    categories = am.Category.objects.all()
+    countries = am.Country.objects.all()
+    sub_categories = am.SubCategory.objects.all()
+
+    template = 'administrator/add-update-question.html'
+    context = {
+        "regions": regions,
+        "categories": categories,
+        "countries": countries,
+        "sub_categories": sub_categories,
+        }
     return render(request, template, context)
 
 
