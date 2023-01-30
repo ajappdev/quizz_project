@@ -85,6 +85,8 @@ TEMPLATES = [
     },
 ]
 
+SECURE_CROSS_ORIGIN_OPENER_POLICY = None
+
 WSGI_APPLICATION = 'project.wsgi.application'
 
 # Database
