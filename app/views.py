@@ -21,6 +21,7 @@ from shutil import move
 import app.models as am
 import app.forms as af
 import app.m00_common as m00
+import app.m01_question as m01
 
 # DECLARING FONCTIONS
 
@@ -76,15 +77,11 @@ def admin_settings(request):
 
 def add_question(request):
 
-    regions = am.Region.objects.all()
-    categories = am.Category.objects.all()
     countries = am.Country.objects.all()
     sub_categories = am.SubCategory.objects.all()
 
     template = 'administrator/add-update-question.html'
     context = {
-        "regions": regions,
-        "categories": categories,
         "countries": countries,
         "sub_categories": sub_categories,
         }
@@ -148,6 +145,33 @@ def ajax_calls(request):
             current_regions = list(
                 am.Region.objects.all().values("id", "name"))
             data_dict = {"current_regions": current_regions}
+
+        elif action == "save_question_form":
+
+            error_message = ""
+            question_type = ""
+            if received_json_data['question_type'] == "freetext":
+                question_type = "Free Text"
+            elif received_json_data['question_type'] == "truefalse":
+                question_type = "True or False"
+            elif received_json_data['question_type'] == "multiplechoices":
+                question_type = "Multiple Choices"
+            else:
+                question_type = received_json_data['question_type']
+
+            try: 
+                error_message = m01.create_question(
+                    question_type,
+                    received_json_data['question_choices'],
+                    received_json_data['question_answer'],
+                    received_json_data['question_country'],
+                    received_json_data['question_text'],
+                    received_json_data['question_sub_category'],
+                )
+            except Exception as e:
+                error_message = e
+
+            data_dict = {"error_message": str(error_message)}
 
         elif action == "get_current_categories":
             current_categories = list(

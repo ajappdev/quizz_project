@@ -11,11 +11,10 @@ def check_question(question_type: str,
         choices_list: list,
         right_answer: str,
         country: str,
-        category: str,
         question: str,
-        region: str,
         sub_category: str):
 
+    print(country)
     error_return = ""
 
     # Check if the question was provided
@@ -28,7 +27,7 @@ def check_question(question_type: str,
 
     # Check if a the type of the question is valid
     elif question_type.lower() not in [q.lower() for q in questions_types]:
-        error_return = "The answer does not figure among the provided choices!"
+        error_return = "The question type is not valid!"
 
     # Check if a free text question was provided with choices
     elif len(choices_list) > 0 and question_type == "Free Text":
@@ -69,14 +68,6 @@ def check_question(question_type: str,
         error_return = "The country does not exist!"
 
     # Check if the country was provided and exists
-    elif len(am.Region.objects.filter(name=region)) == 0:
-        error_return = "The region does not exist!"
-
-    # Check if the country was provided and exists
-    elif len(am.Category.objects.filter(name=category)) == 0:
-        error_return = "The category does not exist!"
-
-    # Check if the country was provided and exists
     elif len(
             am.SubCategory.objects.filter(name=sub_category)) == 0:
         error_return = "The sub category does not exist!"
@@ -85,9 +76,7 @@ def check_question(question_type: str,
     else:
         elements_dict = {
             "country": country,
-            "category": category,
             "question": question,
-            "region": region,
             "right_answer": right_answer,
             "sub_category": sub_category}
 
@@ -102,9 +91,7 @@ def create_question(
         choices_list: list,
         right_answer: str,
         country: str,
-        category: str,
         question: str,
-        region: str,
         sub_category: str
     ):
 
@@ -112,17 +99,13 @@ def create_question(
         choices_list,
         right_answer,
         country,
-        category,
         question,
-        region,
         sub_category)
 
     if check == "":
         # Create the question 
         new_question = am.Question()
-        new_question.category = am.Category.objects.filter(name=category)[0]
         new_question.country = am.Country.objects.filter(name=country)[0]
-        new_question.region = am.Region.objects.filter(name=region)[0]
         new_question.sub_category = am.SubCategory.objects.filter(
             name=sub_category)[0]
         new_question.question = question
@@ -139,8 +122,7 @@ def create_question(
             new_choice.choice = choice
             new_choice.question = new_question
             new_choice.save()
-        
-        return "OK"
 
+        return ""
     else:
         return check

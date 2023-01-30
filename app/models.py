@@ -89,10 +89,8 @@ class Question(models.Model):
     question = models.TextField(
         null=False,
         blank=False)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
-    region = models.ForeignKey(Region, on_delete=models.CASCADE)
     type = models.CharField(
         max_length=200,
         null=False,
