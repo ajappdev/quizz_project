@@ -133,6 +133,13 @@ $( document ).ready(function() {
 
 $(document).on("click", "#save_question_button", function() {
 
+    if (selected_type == "freetext")
+    {
+        element_answer = $("#add_question_field_answer")
+    }else
+    {
+        element_answer = $("#choices_select")
+    }
 
         data_dict = {
             "action": "save_question_form",
@@ -141,7 +148,7 @@ $(document).on("click", "#save_question_button", function() {
             "question_sub_category": $("#add_question_field_sub_category option:selected").text(),
             "question_type": selected_type,
             "question_choices": array_choices,
-            "question_answer": $("#add_question_field_answer").val()
+            "question_answer": element_answer.val()
         }
 
         $.ajax({

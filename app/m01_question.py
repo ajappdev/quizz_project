@@ -14,7 +14,7 @@ def check_question(question_type: str,
         question: str,
         sub_category: str):
 
-    print(country)
+    print(right_answer)
     error_return = ""
 
     # Check if the question was provided
