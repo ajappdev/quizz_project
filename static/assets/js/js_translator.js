@@ -42,6 +42,7 @@ dict_translate = [
     "Sub category name cannot be empty!",
     "Region name cannot be empty!",
     "Category name cannot be empty!",
+    "Wrong questions file!",
     "Warning",
     "Do you really want to remove this question? This will consequently delete all associated data!",
 

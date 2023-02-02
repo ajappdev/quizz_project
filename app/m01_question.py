@@ -1,3 +1,6 @@
+# GENERAL IMPORTATIONS
+import pandas as pd
+import numpy as np
 # APP IMPORTATIONS
 import app.models as am
 
@@ -14,7 +17,6 @@ def check_question(question_type: str,
         question: str,
         sub_category: str):
 
-    print(right_answer)
     error_return = ""
 
     # Check if the question was provided
@@ -128,5 +130,72 @@ def create_question(
         return check
 
 
+def check_bulk_upload(file_path: str):
+    
+    error_return = ""
+    try:
+        dfs = pd.read_excel(file_path)
+    except Exception as e:
+        error_return = "Cannot read excel file: " + str(e)
+        return error_return
+    # Check if the file contains the right columns
+    if dfs.columns.tolist() != [
+            'Question',
+            'Type',
+            'SubCategory',
+            'Country',
+            'Choice1',
+            'Choice2',
+            'Choice3',
+            'Choice4',
+            'Choice5',
+            'Choice6',
+            'Answer']:
+        error_return = "Wrong questions file!"
+    return error_return
+
 def bulk_upload(file_path: str):
-    pass
+    dfs = pd.read_excel(file_path)
+    dfs = dfs.replace(np.nan, "")
+
+    dfs['error'] = ""
+    def treat_question(
+                question_type,
+                question_choices,
+                question_answer,
+                question_country,
+                question_text,
+                question_sub_category):
+
+        error_message = ""
+
+        try: 
+            error_message = create_question(
+                question_type,
+                question_choices,
+                question_answer,
+                question_country,
+                question_text,
+                question_sub_category
+            )
+        except Exception as e:
+            error_message = e
+
+        return error_message
+
+    dfs["error"] = dfs.apply(
+        lambda x: treat_question(
+                x.Type,
+                [x.Choice1,
+                x.Choice2,
+                x.Choice3,
+                x.Choice4,
+                x.Choice5,
+                x.Choice6],
+                x.Answer,
+                x.Country,
+                x.Question,
+                x.SubCategory
+            ), axis=1)
+
+    return dfs

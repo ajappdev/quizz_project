@@ -140,16 +140,22 @@ def upload_questions_file(request):
             fs = FileSystemStorage(path.join(
                 settings.MEDIA_ROOT))
             filename = fs.save(request.POST['key'] + ".xlsx", f)
-        try:
-            file_path = os.path.join(
-                settings.MEDIA_ROOT, request.POST['key'] + ".xlsx")
 
+        file_path = os.path.join(
+            settings.MEDIA_ROOT, request.POST['key'] + ".xlsx")
+        
+        error_upload = m01.check_bulk_upload(file_path)
+        if error_upload == "":
             treatment_result = m01.bulk_upload(file_path)
-
-            data_dict = {"treatment_result": treatment_result}
-        except Exception as e:
-            print(e)
-            data_dict = {"MRZ_found": 0, "tmp_file": request.POST['key'] + ".jpg"}
+            html = render_to_string(
+                template_name="administrator/widgets/bulk-treatment.html",
+                context={
+                    "treatment_result": treatment_result,
+                }
+            )
+            data_dict = {"error": "", "html": html}
+        else:
+            data_dict = {"error": error_upload} 
 
         return JsonResponse(data=data_dict, safe=False)
 

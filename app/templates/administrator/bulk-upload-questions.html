@@ -105,7 +105,8 @@ $(document).on("click", "#upload_next", function() {
         success: function(response) {
             $("#div_form").show("");
             $("#div_identity").hide("");
-            $("#load_div").hide("");   
+            $("#load_div").hide("");
+            $("#div_form").html(response['html'])
         }
     })
     }
