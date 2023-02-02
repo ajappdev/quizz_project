@@ -14,14 +14,46 @@
             <div class="card-body">
                 <h5 class="card-title p0p9">{% trans 'Filter' %}</h5>
                 <div class="row">
-                    <div class="col-lg-4 col-12 col-md-12 mb-3">
-                        <input id="filter_name_customer" class="form-control filter_input" placeholder="{% trans 'Chercher par nom du client ou ID' %}">
+                    <div class="col-lg-8 col-12 col-md-12 mb-3">
+                        <input id="filter_keyword_question" class="form-control filter_input" placeholder="{% trans 'Search per keyword' %}">
                     </div>
-                    <div class="col-lg-4 col-12 col-md-12">
-                        <select id="filter_type_customer" class="form-control filter_input_change">
-                            <option value="">{% trans 'Type de client' %}</option>
-                            <option value="sell">{% trans 'Vente' %}</option>
-                            <option value="buy">{% trans 'Achat' %}</option>
+                    <div class="col-lg-4 col-12 col-md-12 mb-3">
+                        <select id="filter_type_question" class="form-control filter_input_change">
+                            <option value="">{% trans 'Multiple Choices' %}</option>
+                            <option value="sell">{% trans 'Free Text' %}</option>
+                            <option value="buy">{% trans 'True or False' %}</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-6 col-12 col-md-12 mb-3">
+                        <select id="filter_country_question" class="filter_input_change form-control">
+                            <option value="">{% trans 'Country' %}</option>
+                            {% for country in countries %}
+                                <option value="{{country.id|safe}}">{{country}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-lg-6 col-12 col-md-12 mb-3">
+                        <select id="filter_region_question" class="filter_input_change form-control">
+                            <option value="">{% trans 'Region' %}</option>
+                            {% for region in regions %}
+                                <option value="{{region.id|safe}}">{{region}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-lg-6 col-12 col-md-12 mb-3">
+                        <select id="filter_category_question" class="filter_input_change form-control">
+                            <option value="">{% trans 'Category' %}</option>
+                            {% for category in categories %}
+                                <option value="{{category.id|safe}}">{{category}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-lg-6 col-12 col-md-12 mb-3">
+                        <select id="filter_sub_category_question" class="filter_input_change form-control">
+                            <option value="">{% trans 'Sub category' %}</option>
+                            {% for sub_category in sub_categories %}
+                                <option value="{{sub_category.id|safe}}">{{sub_category}}</option>
+                            {% endfor %}
                         </select>
                     </div>
                 </div>
@@ -90,14 +122,14 @@ $(document).on("click", ".delete_question", function() {
     question_id = $(this).closest("tr").find(".question_id").text()
     table_line = $(this).closest("tr")
     Swal.fire({
-        title: translate_js('Attention', "FR"),
-        text: translate_js("Voulez-vous vraiment supprimer ce client ? Cela supprimera par conséquent toutes les transactions associées!", "FR"),
+        title: translate_js('Warning', "FR"),
+        text: translate_js("Do you really want to remove this question? This will consequently delete all associated data!", "FR"),
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: translate_js('Confirmer', "FR"),
-        cancelButtonText: translate_js('Annuler', "FR")
+        confirmButtonText: translate_js('Confirm', "FR"),
+        cancelButtonText: translate_js('Cancel', "FR")
     }).then((result) => {
         if (result.isConfirmed) {
             data_dict = {
@@ -118,7 +150,7 @@ $(document).on("click", ".delete_question", function() {
                 {
                     Swal.fire({
                         icon: 'error',
-                        title: translate_js('Une erreur est survenue!', "FR"),
+                        title: translate_js('An error has occurred!', "FR"),
                         position: 'center',
                         showConfirmButton: false,
                         timer: 1500,
@@ -128,7 +160,7 @@ $(document).on("click", ".delete_question", function() {
                 {
                     Swal.fire({
                         icon: 'success',
-                        title: translate_js("Client supprimé avec succès", "FR"),
+                        title: translate_js("Question successfully deleted!", "FR"),
                         showConfirmButton: false,
                         timer: 1500
                     })
@@ -177,10 +209,13 @@ function filter_results()
 {
 
     var data_dict = {
-        "action": "filter_customers_list",
-        "customer_name_or_id": $("#filter_name_customer").val(),
-        "customer_nationality": $("#filter_nationality").val(),
-        "customer_type": $("#filter_type_customer").val(),
+        "action": "filter_questions_list",
+        "question_keyword": $("#filter_keyword_question").val(),
+        "question_type": $("#filter_type_question").val(),
+        "question_country": $("#filter_country_question").val(),
+        "question_region": $("#filter_region_question").val(),
+        "question_category": $("#filter_category_question").val(),
+        "question_sub_category": $("#filter_sub_category_question").val(),
         "page": filter_page,
     }
 
@@ -194,7 +229,7 @@ function filter_results()
         url: "{% url 'ajax_calls' %}",
         data: JSON.stringify(data_dict),
         success: function(response) {
-            $("#table_customers").html(response["html"])
+            $("#table_questions").html(response["html"])
         }
     })
 }

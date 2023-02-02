@@ -77,15 +77,11 @@ def admin_settings(request):
 
 def add_question(request):
 
-    regions = am.Region.objects.all()
-    categories = am.Category.objects.all()
     countries = am.Country.objects.all()
     sub_categories = am.SubCategory.objects.all()
 
     template = 'administrator/add-update-question.html'
     context = {
-        "regions": regions,
-        "categories": categories,
         "countries": countries,
         "sub_categories": sub_categories,
         }
@@ -118,8 +114,20 @@ def questions(request):
     else:
         success_message = ""
 
+    regions = am.Region.objects.all()
+    categories = am.Category.objects.all()
+    countries = am.Country.objects.all()
+    sub_categories = am.SubCategory.objects.all()
+
     questions = am.Question.objects.all()
-    context = {"questions": questions, "success_message": success_message}
+    context = {
+        "questions": questions,
+        "success_message": success_message,
+        "regions": regions,
+        "categories": categories,
+        "countries": countries,
+        "sub_categories": sub_categories}
+
     return render(request, template, context)
 
 
@@ -156,6 +164,33 @@ def ajax_calls(request):
             current_regions = list(
                 am.Region.objects.all().values("id", "name"))
             data_dict = {"current_regions": current_regions}
+
+        elif action == "save_question_form":
+
+            error_message = ""
+            question_type = ""
+            if received_json_data['question_type'] == "freetext":
+                question_type = "Free Text"
+            elif received_json_data['question_type'] == "truefalse":
+                question_type = "True or False"
+            elif received_json_data['question_type'] == "multiplechoices":
+                question_type = "Multiple Choices"
+            else:
+                question_type = received_json_data['question_type']
+
+            try: 
+                error_message = m01.create_question(
+                    question_type,
+                    received_json_data['question_choices'],
+                    received_json_data['question_answer'],
+                    received_json_data['question_country'],
+                    received_json_data['question_text'],
+                    received_json_data['question_sub_category'],
+                )
+            except Exception as e:
+                error_message = e
+
+            data_dict = {"error_message": str(error_message)}
 
         elif action == "get_current_categories":
             current_categories = list(
@@ -287,6 +322,17 @@ def ajax_calls(request):
                 "error_text": error_text,
                 "new_region_id": new_region_id}
 
+        elif action == "delete_question":
+            error = 0
+            error_text = ""
+            try:
+                am.Question.objects.filter(
+                    id=int(received_json_data['question_id'])).delete()
+            except Exception as e:
+                error_text = "EXCEPTION, AJAX_CALLS, DELETE_QUESTION, 1, " + str(e)
+                error = 1
+            data_dict = {"error": error, "error_text": error_text}
+
         elif action == "delete_region":
             error = 0
             error_text = ""
@@ -365,28 +411,52 @@ def ajax_calls(request):
 
             data_dict = {"error": error, "error_text": error_text}
 
-        if action == "filter_customers_list":
-
-            customer_name_or_id = received_json_data['customer_name_or_id']
-            customer_nationality = received_json_data['customer_nationality']
-            customer_type = received_json_data['customer_type']
-            page = received_json_data['page']
+        if action == "filter_questions_list":
     
-            customers = am.Customer.objects.filter(
-                Q(complete_name__icontains=customer_name_or_id) |
-                Q(identity_number__icontains=customer_name_or_id),
-                nationality__icontains=customer_nationality
+            question_keyword = received_json_data['question_keyword']
+            question_type = received_json_data['question_type']
+            page = received_json_data['page']
+
+            questions = am.Question.objects.filter(
+                question__icontains=question_keyword,
+                type__icontains=question_type
             )
 
-            customers = [
-                c for c in customers if customer_type in c.type_customer()]
+            try:
+                questions = questions.filter(
+                    country__id=int(received_json_data['question_country']))
+            except Exception as e:
+                pass
 
-            customers_list = m00.pagination(page, 10, customers)
+            try:
+                questions = questions.select_related("country").filter(
+                    country__region__id=int(
+                        received_json_data['question_region']))
+            except Exception as e:
+                pass
+
+            try:
+                questions = questions.filter(
+                    sub_category__id=int(
+                        received_json_data['question_sub_category']))
+            except Exception as e:
+                pass
+
+            try:
+                questions = questions.select_related("sub_category").filter(
+                    sub_category__category__id=int(
+                        received_json_data['question_category']))
+            except Exception as e:
+                pass
+
+
+
+            questions_list = m00.pagination(page, 10, questions)
 
             html = render_to_string(
-                        template_name="customer/customers-table.html", 
+                        template_name="administrator/questions-table.html", 
                         context={
-                            "customers": customers_list,
+                            "questions": questions_list,
                         }
                     )
             data_dict = {"html": html}

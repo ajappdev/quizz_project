@@ -8,7 +8,6 @@ from django.db.models import Sum, Count, F, Max, Min
 
 QUESTION_TYPES = [
     ("Multiple Choices", "Multiple Choices"),
-    ("Unique choice", "Unique choice"),
     ("True or False", "True or False"),
     ("Free Text", "Free Text")]
 
@@ -89,10 +88,8 @@ class Question(models.Model):
     question = models.TextField(
         null=False,
         blank=False)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
-    region = models.ForeignKey(Region, on_delete=models.CASCADE)
     type = models.CharField(
         max_length=200,
         null=False,
@@ -107,6 +104,15 @@ class Question(models.Model):
 
     def __str__(self):
         return str(self.question)
+
+    def question_choices(self):
+        if self.type == "Multiple Choices":
+            return Choice.objects.filter(question=self)
+        else:
+            return None
+
+    def right_answer(self):
+        return Answer.objects.filter(question=self)[0]
 
 
 class Choice(models.Model):

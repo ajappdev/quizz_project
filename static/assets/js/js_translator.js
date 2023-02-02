@@ -28,6 +28,7 @@ dict_translate = [
     "Sub category successfully created!",
     "Sub category successfully deleted!",
     "Sub category successfully updated!",
+    "Question successfully deleted!",
     "Add sub category",
     "Update sub category",
     "Delete sub category",
@@ -41,6 +42,9 @@ dict_translate = [
     "Sub category name cannot be empty!",
     "Region name cannot be empty!",
     "Category name cannot be empty!",
+    "Warning",
+    "Do you really want to remove this question? This will consequently delete all associated data!",
+
 ]
 
 function translate_js(text, lang)

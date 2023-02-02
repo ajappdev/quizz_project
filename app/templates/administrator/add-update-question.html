@@ -12,15 +12,7 @@
             <div class="col-lg-12 col-12 col-md-12 mb-5">
                 <input id="add_question_field_question" class="add_question_field form-control" placeholder="{% trans 'Example: What is the capital of France?' %}">
             </div>
-            <div class="col-lg-3 col-12 col-md-12 mb-5">
-                <select id="add_question_field_region" class="add_question_field form-control">
-                    <option disabled selected value="">{% trans 'Region' %}</option>
-                    {% for region in regions %}
-                        <option value="{{region.id|safe}}">{{region}}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-lg-3 col-12 col-md-12 mb-5">
+            <div class="col-lg-6 col-12 col-md-12 mb-5">
                 <select id="add_question_field_country" class="add_question_field form-control">
                     <option disabled selected value="">{% trans 'Country' %}</option>
                     {% for country in countries %}
@@ -28,15 +20,7 @@
                     {% endfor %}
                 </select>
             </div>
-            <div class="col-lg-3 col-12 col-md-12 mb-5">
-                <select id="add_question_field_category" class="add_question_field form-control">
-                    <option disabled selected value="">{% trans 'Category' %}</option>
-                    {% for category in categories %}
-                        <option value="{{category.id|safe}}">{{category}}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-lg-3 col-12 col-md-12 mb-5">
+            <div class="col-lg-6 col-12 col-md-12 mb-5">
                 <select id="add_question_field_sub_category" class="add_question_field form-control">
                     <option disabled selected value="">{% trans 'Sub category' %}</option>
                     {% for sub_category in sub_categories %}
@@ -85,7 +69,7 @@
             <div style="display:none;" id="free_text_answer">
                 <div class="col-lg-12 col-12 col-md-12 mb-5">
                     <label class="form-label">{% trans 'Answer' %}</label>
-                    <textarea style="resize: none;" class="form-control" placeholder="{% trans 'Example: The capital of France is Paris' %}"></textarea>
+                    <textarea id="add_question_field_answer" style="resize: none;" class="form-control" placeholder="{% trans 'Example: The capital of France is Paris' %}"></textarea>
                 </div>
             </div>
                 
@@ -120,6 +104,7 @@
 //////////////////////////////////////////////////////////
 
 selected_type = ""
+var array_choices = []
 
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
@@ -148,7 +133,49 @@ $( document ).ready(function() {
 
 $(document).on("click", "#save_question_button", function() {
 
+    if (selected_type == "freetext")
+    {
+        element_answer = $("#add_question_field_answer")
+    }else
+    {
+        element_answer = $("#choices_select")
+    }
 
+        data_dict = {
+            "action": "save_question_form",
+            "question_text": $("#add_question_field_question").val(),
+            "question_country": $("#add_question_field_country option:selected").text(),
+            "question_sub_category": $("#add_question_field_sub_category option:selected").text(),
+            "question_type": selected_type,
+            "question_choices": array_choices,
+            "question_answer": element_answer.val()
+        }
+
+        $.ajax({
+            headers: {
+                "X-CSRFToken": getCookie("csrftoken")
+            },
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            url: "{% url 'ajax_calls' %}",
+            data: JSON.stringify(data_dict),
+            success: function(response) {
+                if (response['error_message'] != "")
+                {
+                    Swal.fire({
+                        icon: 'error',
+                        title: translate_js('An error has occurred!', "EN"),
+                        text: response['error_message'],
+                        position: 'center',
+                        showConfirmButton: false,
+                    })
+                }else
+                {
+                    document.location.href = '../../administrator/questions/?success_message=creation'
+                }
+            }
+        })
 
 });
 
