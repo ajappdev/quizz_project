@@ -21,6 +21,7 @@ from shutil import move
 import app.models as am
 import app.forms as af
 import app.m00_common as m00
+import app.m01_question as m01
 
 # DECLARING FONCTIONS
 
@@ -98,6 +99,14 @@ def update_question(request, pk: int):
     return render(request, template, context)
 
 
+def bulk_upload_questions(request):
+
+    template = 'administrator/bulk-upload-questions.html'
+    context = {
+        }
+    return render(request, template, context)
+
+
 def questions(request):
     template = 'administrator/questions.html'
 
@@ -115,22 +124,21 @@ def questions(request):
 
 
 @csrf_exempt
-def upload_id_file(request):
+def upload_questions_file(request):
     if request.method == 'POST':
         files = request.FILES.getlist("0")
 
         for f in files:
             fs = FileSystemStorage(path.join(
                 settings.MEDIA_ROOT))
-            filename = fs.save(request.POST['key'] + ".jpg", f)
+            filename = fs.save(request.POST['key'] + ".xlsx", f)
         try:
             file_path = os.path.join(
-                settings.MEDIA_ROOT, request.POST['key'] + ".jpg")
-            if request.POST['key'] == "PASSPORT":
-                result = m00.process_id_card(file_path)
-            else:
-                result = m00.process_passport(file_path)
-            data_dict = {"MRZ_found": 1, "id_reading": result, "tmp_file": request.POST['key'] + ".jpg"}
+                settings.MEDIA_ROOT, request.POST['key'] + ".xlsx")
+
+            treatment_result = m01.bulk_upload(file_path)
+
+            data_dict = {"treatment_result": treatment_result}
         except Exception as e:
             print(e)
             data_dict = {"MRZ_found": 0, "tmp_file": request.POST['key'] + ".jpg"}

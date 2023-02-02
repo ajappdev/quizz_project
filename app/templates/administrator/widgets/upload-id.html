@@ -6,13 +6,7 @@
 <div id="uploadArea2" class="upload-area">
     <!-- Header -->
     <div class="upload-area__header">
-      <h1 class="upload-area__title">{% trans "Pièce d'identité" %}</h1>
-
-      <select style="border-color: #7cc59b; color: grey;" class="form-control mt-3" name="customer_type_identity" id="customer_type_identity">
-        <option value="">{% trans "Type de pièce d'identité" %}</option>
-        <option value="PASSPORT">Passport</option>
-        <option value="ID">{% trans "Carte d'identité" %}</option>
-      </select>
+      <h1 class="upload-area__title">{% trans "Upload File" %}</h1>
 
     </div>
     <!-- End Header -->
@@ -22,14 +16,11 @@
       <span class="drop-zoon__icon">
         <i class='bx bxs-file-image'></i>
       </span>
-      <p class="drop-zoon__paragraph">{% trans "Déposez le passport ou la carte d'identité du client ici ou cliquez pour parcourir" %}</p>
+      <p class="drop-zoon__paragraph">{% trans "Drop the questions file here or click to browse" %}</p>
 
-      <p class="upload-area__paragraph">
-        {% trans "Le fichier d'identité doit être sous format image" %}
-      </p>
 
       <img src="" alt="Preview Image" id="previewImage2" class="drop-zoon__preview-image" draggable="false">
-      <input type="file" id="fileInput2" class="drop-zoon__file-input" accept="image/*">
+      <input type="file" id="fileInput2" class="drop-zoon__file-input" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
     </div>
     <!-- End Drop Zoon -->
   
@@ -45,7 +36,6 @@
         </div>
       </div>
     </div>
-    <p style="display:none;" id="consulter_id" class="p0p9"><a target="_blank" href="/media/{{customer.id|safe}}.jpg">{% trans "Consulter" %}</a></p>
     <!-- End File Details -->
   </div>
   <!-- End Upload Area -->
@@ -94,10 +84,6 @@
   }
 }
 
-/* Header */
-.upload-area__header {
-
-}
 
 .upload-area__title {
   font-size: 1.8rem;
@@ -230,11 +216,6 @@
 /* (drop-zoon--over) Modifier Class */
 .drop-zoon--Uploaded {
   
-}
-
-.drop-zoon--Uploaded .drop-zoon__icon,
-.drop-zoon--Uploaded .drop-zoon__paragraph {
-  display: none;
 }
 
 /* File Details Area */
@@ -384,14 +365,9 @@ const uploadedFileInfo2 = document.querySelector('#uploadedFileInfo2');
 
 // Uploaded File  Name
 
-
-// Uploaded File Icon
-const uploadedFileIconText2 = document.querySelector('.uploaded-file__icon-text');
-
 // Images Types
 const imagesTypes2 = [
-  "jpeg",
-  "png"
+  ".xlsx"
 ];
 
 // When (drop-zoon) has (dragover) Event 
@@ -451,26 +427,14 @@ function uploadFile2(file_to_upload) {
   // If File Is Passed from the (File Validation) Function
   if (fileValidate2(fileType, fileSize)) {
     // Add Class (drop-zoon--Uploaded) on (drop-zoon)
-
-    $(".upload-area__paragraph").html("")
+    $(".drop-zoon__paragraph").html(file_to_upload.name)
     dropZoon2.classList.add('drop-zoon--Uploaded');
-
-    // Hide Preview Image
-    previewImage2.style.display = 'none';
 
     // Remove Class (uploaded-file--open) From (uploadedFile)
     uploadedFile2.classList.remove('uploaded-file--open');
     // Remove Class (uploaded-file__info--active) from (uploadedFileInfo2)
     uploadedFileInfo2.classList.remove('uploaded-file__info--active');
 
-    // After File Reader Loaded 
-    fileReader.addEventListener('load', function () {
-      // After Half Second 
-      previewImage2.style.display = 'block';
-      // Add The (fileReader) Result Inside (previewImage2) Source
-      previewImage2.setAttribute('src', fileReader.result);
-
-    });
 
     // Read (file) As Data Url 
     fileReader.readAsDataURL(file_to_upload);
@@ -506,34 +470,36 @@ function progressMove() {
 
 id_card_uploaded = 0
 
+
+function hasExtension(inputID) {
+    var fileName = document.getElementById(inputID).value;
+    console.log(fileName.split('.')[1])
+    if (fileName.split('.')[1] == "xlsx"){
+            return 1
+        }
+    return 0
+}
+
+
 // Simple File Validate Function
 function fileValidate2(fileType, fileSize) {
   // File Type Validation
-  let isImage = imagesTypes2.filter((type) => fileType.indexOf(`image/${type}`) !== -1);
-
-  // If The Uploaded File Type Is 'jpeg'
-  if (isImage[0] === 'jpeg') {
-    // Add Inisde (uploadedFileIconText2) The (jpg) Value
-    uploadedFileIconText2.innerHTML = 'jpg';
-  } else { // else
-    // Add Inisde (uploadedFileIconText2) The Uploaded File Type 
-    uploadedFileIconText2.innerHTML = isImage[0];
-  };
 
   // If The Uploaded File Is An Image
-  if (isImage.length !== 0) {
+  if (hasExtension('fileInput2') == 1)
+  {
     // Check, If File Size Is 2MB or Less
-    if (fileSize <= 20000000) { // 20MB :)
+    if (fileSize <= 50000000) { // 20MB :)
       id_card_uploaded = 1
       return true;
     } else { // Else File Size
       id_card_uploaded = 0
-      return alert('Please Your File Should be 20 Megabytes or Less');
+      return alert('Your file should be 50 megabytes or less');
     };
   } else { // Else File Type 
 
     id_card_uploaded = 0
-    return alert('Please make sure to upload An Image File Type');
+    return alert('Please make sure to upload an .xlsx file');
   };
 };
 

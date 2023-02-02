@@ -144,3 +144,7 @@ def create_question(
 
     else:
         return check
+
+
+def bulk_upload(file_path: str):
+    pass
