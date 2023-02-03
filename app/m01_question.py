@@ -171,8 +171,6 @@ def check_bulk_upload(file_path: str):
             'Choice2',
             'Choice3',
             'Choice4',
-            'Choice5',
-            'Choice6',
             'Answer']:
         error_return = "Wrong questions file!"
     elif len(dfs) == 0:
@@ -214,9 +212,7 @@ def bulk_upload(file_path: str):
                 [x.Choice1,
                 x.Choice2,
                 x.Choice3,
-                x.Choice4,
-                x.Choice5,
-                x.Choice6],
+                x.Choice4],
                 x.Answer,
                 x.Country,
                 x.Question,

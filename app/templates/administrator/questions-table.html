@@ -38,7 +38,7 @@
                 {% if question.type == "Multiple Choices" %}
                 <p class="text-muted mb-0">
                 {% for choice in question.question_choices %}
-                    {{choice.choice}} <span class="separator">&#11044;</span>
+                <span class="separator">&#11044;</span> {{choice.choice}} 
                 {% endfor %}
                 </p>
                 {% endif %}
