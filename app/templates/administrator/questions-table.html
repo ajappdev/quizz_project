@@ -5,8 +5,8 @@
     <thead class="bg-light">
       <tr>
         <th>{% trans "Question" %}</th>
-        <th>{% trans "Type" %}</th>
         <th>{% trans "Answer" %}</th>
+        <th>{% trans "Type" %}</th>
         <th class="text-end"></th>
       </tr>
     </thead>
@@ -25,6 +25,9 @@
                 </div>
                 </td>
                 <td>
+                    {{question.right_answer}}
+                </td>
+                <td>
                 {% if question.type == 'Multiple Choices' %}
                     <span class="badge badge-warning rounded-pill d-inline">{{question.type}}</span>
                 {% elif question.type == 'Free Text' %}
@@ -39,11 +42,7 @@
                 {% endfor %}
                 </p>
                 {% endif %}
-
                  </td>
-                <td>
-                    {{question.right_answer}}
-                </td>
                 <td class="text-end">
                 <!-- <a href="{% url 'update_question' question.pk %}" type="button" class="btn btn-link btn-sm btn-rounded">
                     <i class="p1p3 fas fa-edit"></i>

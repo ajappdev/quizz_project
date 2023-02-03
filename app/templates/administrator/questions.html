@@ -6,7 +6,7 @@
 
 <div class="container">
     <div class="mb-3 d-grid gap-2 d-md-flex justify-content-md-end">
-        <a href="{% url 'add_question' %}" class="btn btn-success" type="button"><i style="margin-right:5px;" class="fas fa-add"></i> {% trans "Create question" %}</a>
+        <a href="{% url 'add_question' %}" class="btn btn-success" type="button"><i style="margin-right:5px;" class="fas fa-add"></i> {% trans "Create question" %}</a>            <a href="{% url 'bulk_upload_questions' %}" class="btn btn-danger"><i class="fas fa-upload"></i> {% trans 'Bulk upload' %}</a>
       </div>
 
       <div class="filter-row row mb-3 mt-5">
@@ -19,17 +19,10 @@
                     </div>
                     <div class="col-lg-4 col-12 col-md-12 mb-3">
                         <select id="filter_type_question" class="form-control filter_input_change">
-                            <option value="">{% trans 'Multiple Choices' %}</option>
-                            <option value="sell">{% trans 'Free Text' %}</option>
-                            <option value="buy">{% trans 'True or False' %}</option>
-                        </select>
-                    </div>
-                    <div class="col-lg-6 col-12 col-md-12 mb-3">
-                        <select id="filter_country_question" class="filter_input_change form-control">
-                            <option value="">{% trans 'Country' %}</option>
-                            {% for country in countries %}
-                                <option value="{{country.id|safe}}">{{country}}</option>
-                            {% endfor %}
+                            <option value="">{% trans 'Question Type' %}</option>
+                            <option value="Multiple Choices">{% trans 'Multiple Choices' %}</option>
+                            <option value="Free Text">{% trans 'Free Text' %}</option>
+                            <option value="True or False">{% trans 'True or False' %}</option>
                         </select>
                     </div>
                     <div class="col-lg-6 col-12 col-md-12 mb-3">
@@ -37,6 +30,14 @@
                             <option value="">{% trans 'Region' %}</option>
                             {% for region in regions %}
                                 <option value="{{region.id|safe}}">{{region}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-lg-6 col-12 col-md-12 mb-3">
+                        <select id="filter_country_question" class="filter_input_change form-control">
+                            <option value="">{% trans 'Country' %}</option>
+                            {% for country in countries %}
+                                <option value="{{country.id|safe}}">{{country}}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -50,7 +51,7 @@
                     </div>
                     <div class="col-lg-6 col-12 col-md-12 mb-3">
                         <select id="filter_sub_category_question" class="filter_input_change form-control">
-                            <option value="">{% trans 'Sub category' %}</option>
+                            <option value="">{% trans 'Sub Category' %}</option>
                             {% for sub_category in sub_categories %}
                                 <option value="{{sub_category.id|safe}}">{{sub_category}}</option>
                             {% endfor %}
@@ -198,6 +199,69 @@ $(document).on('click', '.next-page-liste', function() {
     filter_results();
 });
 
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+////////////////////////CHANGE EVENTS//////////////////////
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+
+$(document).on("change", "#filter_region_question", function() {
+
+    var data_dict = {
+        "action": "look_for_childs",
+        "what": "countries",
+        "parent": $(this).val()}
+
+    $.ajax({
+        headers: {
+            "X-CSRFToken": getCookie("csrftoken")
+        },
+        type: 'POST',
+        processData: false,
+        contentType: false,
+        url: "{% url 'ajax_calls' %}",
+        data: JSON.stringify(data_dict),
+        success: function(response) {
+            var countries_select = response['childs']
+            var options_html = '<option value="">Country</option>'
+            for (x=0; x < countries_select.length; x++)
+            {
+                options_html = options_html + '<option value="' + countries_select[x]['id'] + '">' + countries_select[x]['name'] + '</option>'
+            }
+            $("#filter_country_question").html(options_html)
+        }
+
+    })
+});
+
+
+$(document).on("change", "#filter_category_question", function() {
+
+var data_dict = {
+    "action": "look_for_childs",
+    "what": "sub_categories",
+    "parent": $(this).val()}
+
+$.ajax({
+    headers: {
+        "X-CSRFToken": getCookie("csrftoken")
+    },
+    type: 'POST',
+    processData: false,
+    contentType: false,
+    url: "{% url 'ajax_calls' %}",
+    data: JSON.stringify(data_dict),
+    success: function(response) {
+        var sub_categories_select = response['childs']
+            var options_html = '<option value="">Sub Category</option>'
+            for (x=0; x < sub_categories_select.length; x++)
+            {
+                options_html = options_html + '<option value="' + sub_categories_select[x]['id'] + '">' + sub_categories_select[x]['name'] + '</option>'
+            }
+            $("#filter_sub_category_question").html(options_html)
+    }
+})
+});
 
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////

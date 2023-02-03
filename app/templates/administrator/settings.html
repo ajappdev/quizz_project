@@ -9,9 +9,40 @@
 {% csrf_token %}
     <div class="container">
     <div class="row">
+        
         <div class="col-lg-6 col-12 col-md-12 mb-3">
 
-            <div style="overflow-x: auto;" class="card h-100 d-inline-block w-100">
+            <div style="overflow-x: auto; max-height:300px;" class="card h-100 d-inline-block w-100">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans 'Regions' %}</h5><button id="add_region_button" class="add_button_settings btn btn-sm btn-success"><i class="fas fa-plus"></i></button>
+                </div>
+
+                <table class="table align-middle mb-0 bg-white">
+
+                    <tbody id="tbody_regions">
+                    {% for region in regions %}
+                            <tr>
+                                <td class="hidden region_id">
+                                    {{region.id|safe}}
+                                </td>
+                                <td class="region_name">
+                                    {{region.name}}
+                                </td>
+                                <td style="white-space: nowrap;" class="text-end">
+                                    <button class="btn update_region_button btn-sm btn-secondary"><i class="fas fa-edit"></i></button> <button class="delete_region_button btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-6 col-12 col-md-12 mb-3">
+
+            <div style="overflow-x: auto; max-height:300px;" class="card h-100 d-inline-block w-100">
                 <div class="card-body">
                     <h5 class="card-title">{% trans 'Countries' %}</h5><button id="add_country_button" class="add_button_settings btn btn-sm btn-success"><i class="fas fa-plus"></i></button>
                 </div>
@@ -44,24 +75,24 @@
 
         <div class="col-lg-6 col-12 col-md-12 mb-3">
 
-            <div style="overflow-x: auto;" class="card h-100 d-inline-block w-100">
+            <div style="overflow-x: auto; max-height:300px;" class="card h-100 d-inline-block w-100">
                 <div class="card-body">
-                    <h5 class="card-title">{% trans 'Regions' %}</h5><button id="add_region_button" class="add_button_settings btn btn-sm btn-success"><i class="fas fa-plus"></i></button>
+                    <h5 class="card-title">{% trans 'Categories' %}</h5><button id="add_category_button" class="add_button_settings btn btn-sm btn-success"><i class="fas fa-plus"></i></button>
                 </div>
 
                 <table class="table align-middle mb-0 bg-white">
 
-                    <tbody id="tbody_regions">
-                    {% for region in regions %}
+                    <tbody id="tbody_categories">
+                    {% for category in categories %}
                             <tr>
-                                <td class="hidden region_id">
-                                    {{region.id|safe}}
+                                <td class="hidden category_id">
+                                    {{category.id|safe}}
                                 </td>
-                                <td class="region_name">
-                                    {{region.name}}
+                                <td class="category_name">
+                                    {{category.name}}
                                 </td>
                                 <td style="white-space: nowrap;" class="text-end">
-                                    <button class="btn update_region_button btn-sm btn-secondary"><i class="fas fa-edit"></i></button> <button class="delete_region_button btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                                    <button class="btn update_category_button btn-sm btn-secondary"><i class="fas fa-edit"></i></button> <button class="delete_category_button btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
                                 </td>
                             </tr>
                     {% endfor %}
@@ -75,9 +106,9 @@
 
         <div class="col-lg-6 col-12 col-md-12 mb-3">
 
-            <div style="overflow-x: auto;" class="card h-100 d-inline-block w-100">
+            <div style="overflow-x: auto; max-height:300px;" class="card h-100 d-inline-block w-100">
                 <div class="card-body">
-                    <h5 class="card-title">{% trans 'Sub categories' %}</h5><button id="add_sub_category_button" class="add_button_settings btn btn-sm btn-success"><i class="fas fa-plus"></i></button>
+                    <h5 class="card-title">{% trans 'Sub Categories' %}</h5><button id="add_sub_category_button" class="add_button_settings btn btn-sm btn-success"><i class="fas fa-plus"></i></button>
                 </div>
 
                 <table class="table align-middle mb-0 bg-white">
@@ -105,35 +136,6 @@
 
         </div>
 
-        <div class="col-lg-6 col-12 col-md-12 mb-3">
-
-            <div style="overflow-x: auto;" class="card h-100 d-inline-block w-100">
-                <div class="card-body">
-                    <h5 class="card-title">{% trans 'Categories' %}</h5><button id="add_category_button" class="add_button_settings btn btn-sm btn-success"><i class="fas fa-plus"></i></button>
-                </div>
-
-                <table class="table align-middle mb-0 bg-white">
-
-                    <tbody id="tbody_categories">
-                    {% for category in categories %}
-                            <tr>
-                                <td class="hidden category_id">
-                                    {{category.id|safe}}
-                                </td>
-                                <td class="category_name">
-                                    {{category.name}}
-                                </td>
-                                <td style="white-space: nowrap;" class="text-end">
-                                    <button class="btn update_category_button btn-sm btn-secondary"><i class="fas fa-edit"></i></button> <button class="delete_category_button btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
-                                </td>
-                            </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-
-            </div>
-
-        </div>
 
 </div>
 </div>

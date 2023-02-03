@@ -105,25 +105,48 @@ def create_question(
         sub_category)
 
     if check == "":
-        # Create the question 
-        new_question = am.Question()
-        new_question.country = am.Country.objects.filter(name=country)[0]
-        new_question.sub_category = am.SubCategory.objects.filter(
-            name=sub_category)[0]
-        new_question.question = question
-        new_question.type = question_type
-        new_question.save()
+        # Create the question
 
-        new_answer = am.Answer()
-        new_answer.answer = right_answer
-        new_answer.question = new_question
-        new_answer.save()
+        # IF the question already exists?
+        if len(am.Question.objects.filter(question=question)) > 0:
+            new_question = am.Question.objects.filter(question=question)[0]
+            new_question.country = am.Country.objects.filter(name=country)[0]
+            new_question.sub_category = am.SubCategory.objects.filter(
+                name=sub_category)[0]
+            new_question.type = question_type
+            new_question.save()
 
-        for choice in choices_list:
-            new_choice = am.Choice()
-            new_choice.choice = choice
-            new_choice.question = new_question
-            new_choice.save()
+            new_answer = am.Answer.objects.get(question=new_question)
+            new_answer.answer = right_answer
+            new_answer.save()
+            
+            am.Choice.objects.filter(question=new_question).delete()
+            for choice in choices_list:
+                new_choice = am.Choice()
+                new_choice.choice = choice
+                new_choice.question = new_question
+                new_choice.save()
+
+        # IF Its a new question?
+        else:
+            new_question = am.Question()
+            new_question.country = am.Country.objects.filter(name=country)[0]
+            new_question.sub_category = am.SubCategory.objects.filter(
+                name=sub_category)[0]
+            new_question.question = question
+            new_question.type = question_type
+            new_question.save()
+
+            new_answer = am.Answer()
+            new_answer.answer = right_answer
+            new_answer.question = new_question
+            new_answer.save()
+
+            for choice in choices_list:
+                new_choice = am.Choice()
+                new_choice.choice = choice
+                new_choice.question = new_question
+                new_choice.save()
 
         return ""
     else:

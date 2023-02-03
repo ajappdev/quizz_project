@@ -8,13 +8,36 @@
         <th>{% trans "Type" %}</th>
         <th>{% trans "Country" %}</th>
         <th>{% trans "Sub Category" %}</th>
-        <th>{% trans "Status" %}</th>
-        <th class="text-end"></th>
+        <th class="text-center">{% trans "Status" %}</th>
       </tr>
     </thead>
     <tbody>
         {% for index, row in treatment_result.iterrows %}
             {% if row.11 != '' %}
+            <tr style="background:rgb(255 220 220)">
+                <td>
+                    {{row.0}}
+                </td>
+                <td>
+                {% if row.1 == 'Multiple Choices' %}
+                    <span class="badge badge-warning rounded-pill d-inline">Multiple choices</span>
+                {% elif row.1 == 'Free Text' %}
+                    <span class="badge badge-primary rounded-pill d-inline">Free text</span>
+                {% else %}
+                    <span class="badge badge-info rounded-pill d-inline">True or false</span>
+                {% endif %}
+                </td>
+                <td>
+                    {{row.3}}
+                </td>
+                <td>
+                    {{row.2}}
+                </td>
+                <td class="text-center">
+                    <span title="{{row.11}}" class="error_details badge bg bg-danger"><i class="fas fa-exclamation"></i></span>
+                </td>
+            </tr>
+            {% else %}
             <tr>
                 <td>
                     {{row.0}}
@@ -28,30 +51,65 @@
                 <td>
                     {{row.2}}
                 </td>
-                <td>
-                    <i style="color:red;" class="fas fa-times"></i>
+                <td class="text-center">
+                    <span class="badge bg bg-success"><i class="fas fa-check"></i></span>
                 </td>
             </tr>
-            {% else %}
-                <td>
-                    {{row.0}}
-                </td>
-                <td>
-                    {{row.1}}
-                </td>
-                <td>
-                    {{row.3}}
-                </td>
-                <td>
-                    {{row.2}}
-                </td>
-                <td>
-                    <i style="color:green;" class="fas fa-check"></i>
-                </td>
             {% endif %}
       {% endfor %}
     </tbody>
   </table>
-    {% if customers.has_other_pages %}
-    {% include 'widgets/pagination.html' with page_obj=customers  %}
-    {% endif %}
+
+
+  
+<script
+src="https://code.jquery.com/jquery-3.6.1.js"
+integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
+crossorigin="anonymous"></script>
+
+
+<script>
+  
+
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+/////////////////////////////AT LOAD//////////////////////
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+
+
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+////////////////////////CHANGE EVENTS//////////////////////
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+
+
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+////////////////////////CLICK EVENTS//////////////////////
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+
+
+$(document).on("click", ".error_details", function() {
+    Swal.fire({
+        icon: 'error',
+        text: translate_js($(this).attr("title"), "EN"),
+        position: 'center',
+        showConfirmButton: false,
+    })
+});
+
+
+</script>
+
+
+<style>
+
+.error_details
+{
+    cursor: pointer;
+}
+
+</style>

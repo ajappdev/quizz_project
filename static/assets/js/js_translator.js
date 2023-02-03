@@ -45,7 +45,17 @@ dict_translate = [
     "Wrong questions file!",
     "Warning",
     "Do you really want to remove this question? This will consequently delete all associated data!",
-
+    "The question cannot be empty!",
+    "The answer cannot be empty!",
+    "The question type is not valid!",
+    "A free text question cannot be provided with a choice!",
+    "A true/false question cannot be provided with more than 2 choices!",
+    "A true/false question was provided but neither true nor false is in the list of choices!",
+    "A true/false question was provided but either true or false was not provided!",
+    "A multiple choices question was provided but the choices list contains less than 2 options!",
+    "A multiple choices question was provided but the answer does not figure in the list of choices!",
+    "The country does not exist!",
+    "The sub category does not exist!"
 ]
 
 function translate_js(text, lang)

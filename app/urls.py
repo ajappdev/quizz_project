@@ -12,6 +12,7 @@ urlpatterns = [
     path('administrator/settings/', av.admin_settings, name='admin_settings'),
     path('administrator/update-question/<int:pk>/', av.update_question, name='update_question'),
     path('administrator/questions/', av.questions, name='questions'),
+    path('administrator/initial-settings/', av.initial_settings_upload, name='initial_settings_upload'),
     path('auth/register/', av.register, name='register'),
     path('ajax-calls/', av.ajax_calls, name='ajax_calls'),
     path('upload-questions-file/', av.upload_questions_file, name='upload_questions_file'),

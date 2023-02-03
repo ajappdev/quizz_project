@@ -29,8 +29,22 @@
     <div id="load_div" class="hidden" style="text-align:center;">
         <img src="{% static 'assets/img/load.gif' %}">
     </div>
-    <div class="hidden" id="div_form">
+    <div class="hidden" style="max-height:500px; overflow-y: auto;" id="div_form">
     
+    </div>
+
+
+    <div class="hidden" style="margin-top:20px;" id="action_div">
+    <div class="row">
+        <div class="col-lg-6 col-12 col-md-12">
+    
+        </div>
+    
+        <div style="text-align: right;" class="col-lg-6 col-12 col-md-12">
+            <a href="{% url 'bulk_upload_questions' %}" class="btn btn-primary"><i class="fas fa-refresh"></i> {% trans 'Retry' %}</a>
+            <a href="{% url 'questions' %}" class="btn btn-success"><i class="fas fa-arrow-right"></i> {% trans 'Go to questions' %}</a>
+        </div>
+      </div>
     </div>
     </div>
 </div>
@@ -88,7 +102,8 @@ $(document).on("click", "#upload_next", function() {
 
     $("#div_form").hide("");
     $("#div_identity").hide("");
-    $("#load_div").show("");   
+    $("#load_div").show("");
+    $("#action_div").hide("")
     var form_data = new FormData();
     form_data.append(0, file_to_upload);
     form_data.append("key", makeid(50))
@@ -106,7 +121,8 @@ $(document).on("click", "#upload_next", function() {
             $("#div_form").show("");
             $("#div_identity").hide("");
             $("#load_div").hide("");
-            $("#div_form").html(response['html'])
+            $("#div_form").html(response['html']);
+            $("#action_div").show("")
         }
     })
     }
