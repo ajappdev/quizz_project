@@ -240,7 +240,6 @@ def initial_settings_upload(request):
     "Zimbabwe"]
 
     for country in africa_countries:
-        print(country)
         new_country = am.Country()
         new_country.name = country
         new_country.region = region_africa
@@ -614,7 +613,6 @@ def upload_questions_file(request):
             )
             data_dict = {"error": "", "html": html}
         else:
-            print(error_upload)
             data_dict = {"error": error_upload} 
 
         return JsonResponse(data=data_dict, safe=False)

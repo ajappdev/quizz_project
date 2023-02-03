@@ -175,6 +175,8 @@ def check_bulk_upload(file_path: str):
             'Choice6',
             'Answer']:
         error_return = "Wrong questions file!"
+    elif len(dfs) == 0:
+        error_return = "The questions file is empty!"
     return error_return
 
 def bulk_upload(file_path: str):

@@ -55,7 +55,8 @@ dict_translate = [
     "A multiple choices question was provided but the choices list contains less than 2 options!",
     "A multiple choices question was provided but the answer does not figure in the list of choices!",
     "The country does not exist!",
-    "The sub category does not exist!"
+    "The sub category does not exist!",
+    "The questions file is empty!"
 ]
 
 function translate_js(text, lang)

@@ -118,11 +118,29 @@ $(document).on("click", "#upload_next", function() {
         url: "{% url 'upload_questions_file' %}",
         data: form_data,
         success: function(response) {
-            $("#div_form").show("");
-            $("#div_identity").hide("");
-            $("#load_div").hide("");
-            $("#div_form").html(response['html']);
-            $("#action_div").show("")
+
+            if (response['error'] == "")
+            {
+                $("#div_form").show("");
+                $("#div_identity").hide("");
+                $("#load_div").hide("");
+                $("#div_form").html(response['html']);
+                $("#action_div").show("")
+            }else
+            {
+                $("#div_identity").show("");
+                $("#load_div").hide("");
+                $("#div_form").html("");
+                $("#action_div").hide("");
+                $("#upload_next").attr("disabled", true)
+                Swal.fire({
+                    icon: 'error',
+                    title: translate_js('An error has occurred!', "EN"),
+                    text: response['error'],
+                    position: 'center',
+                    showConfirmButton: false,
+                })
+            }
         }
     })
     }
