@@ -11,11 +11,12 @@ from django.core.files.storage import FileSystemStorage
 # GENERAL DECLARATIONS
 import pandas as pd
 import os
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 import json
 from datetime import date, datetime
 from os import path
 from shutil import move
+from io import BytesIO
 
 # APP DECLARATIONS
 import app.models as am
@@ -617,6 +618,30 @@ def upload_questions_file(request):
 
         return JsonResponse(data=data_dict, safe=False)
 
+
+def download_excel_template(request):
+    df = pd.DataFrame(columns=[
+            'Question',
+            'Choice 1',
+            'Choice 2',
+            'Choice 3',
+            'Choice 4',
+            'Answer',
+            'Country',
+            'Sub Type'])
+    with BytesIO() as b:
+        # Use the StringIO object as the filehandle.
+        writer = pd.ExcelWriter(b, engine='xlsxwriter')
+        df.to_excel(writer, sheet_name='Sheet1', index = False)
+        writer.save()
+        # Set up the Http response.
+        filename = 'questions_template.xlsx'
+        response = HttpResponse(
+            b.getvalue(),
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        )
+        response['Content-Disposition'] = 'attachment; filename=%s' % filename
+        return response
 
 def ajax_calls(request):
 

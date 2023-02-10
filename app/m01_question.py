@@ -10,14 +10,21 @@ questions_types = [
     "True or False",
     "Free Text"]
 
-def check_question(question_type: str,
+def check_question(
+        question: str,
         choices_list: list,
         right_answer: str,
         country: str,
-        question: str,
         sub_category: str):
 
     error_return = ""
+
+    if len(choices_list) == 0:
+        question_type = 'Free Text'
+    elif 'true' in choices_list or 'True' in choices_list:
+        question_type = 'True or False'
+    else:
+        question_type = 'Multiple Choices'
 
     # Check if the question was provided
     if question == "":
@@ -26,14 +33,6 @@ def check_question(question_type: str,
     # Check if the answer was provided
     elif right_answer == "":
         error_return = "The answer cannot be empty!"
-
-    # Check if a the type of the question is valid
-    elif question_type.lower() not in [q.lower() for q in questions_types]:
-        error_return = "The question type is not valid!"
-
-    # Check if a free text question was provided with choices
-    elif len(choices_list) > 0 and question_type == "Free Text":
-        error_return = "A free text question cannot be provided with a choice!"
 
     # Check if a true/false question was provided but the choices list contain
     # more than two options
@@ -69,7 +68,7 @@ def check_question(question_type: str,
     elif len(am.Country.objects.filter(name=country)) == 0:
         error_return = "The country does not exist!"
 
-    # Check if the country was provided and exists
+    # Check if the sub category was provided and exists
     elif len(
             am.SubCategory.objects.filter(name=sub_category)) == 0:
         error_return = "The sub category does not exist!"
@@ -85,27 +84,31 @@ def check_question(question_type: str,
         for k, v in elements_dict.items():
             if v == "":
                 error_return = "The " + str(k) + " cannot be empty!"
-
     return error_return
 
 def create_question(
-        question_type: str,
+        question: str,
         choices_list: list,
         right_answer: str,
         country: str,
-        question: str,
         sub_category: str
     ):
 
-    check = check_question(question_type,
+    check = check_question(
+        question,
         choices_list,
         right_answer,
         country,
-        question,
         sub_category)
 
     if check == "":
         # Create the question
+        if len(choices_list) == 0:
+            question_type = 'Free Text'
+        elif 'true' in choices_list or 'True' in choices_list:
+            question_type = 'True or False'
+        else:
+            question_type = 'Multiple Choices'
 
         # IF the question already exists?
         if len(am.Question.objects.filter(question=question)) > 0:
@@ -147,7 +150,6 @@ def create_question(
                 new_choice.choice = choice
                 new_choice.question = new_question
                 new_choice.save()
-
         return ""
     else:
         return check
@@ -164,14 +166,13 @@ def check_bulk_upload(file_path: str):
     # Check if the file contains the right columns
     if dfs.columns.tolist() != [
             'Question',
-            'Type',
-            'SubCategory',
+            'Choice 1',
+            'Choice 2',
+            'Choice 3',
+            'Choice 4',
+            'Answer',
             'Country',
-            'Choice1',
-            'Choice2',
-            'Choice3',
-            'Choice4',
-            'Answer']:
+            'Sub Type']:
         error_return = "Wrong questions file!"
     elif len(dfs) == 0:
         error_return = "The questions file is empty!"
@@ -183,22 +184,20 @@ def bulk_upload(file_path: str):
 
     dfs['error'] = ""
     def treat_question(
-                question_type,
+                question_text,
                 question_choices,
                 question_answer,
                 question_country,
-                question_text,
                 question_sub_category):
 
         error_message = ""
 
         try: 
             error_message = create_question(
-                question_type,
+                question_text,
                 question_choices,
                 question_answer,
                 question_country,
-                question_text,
                 question_sub_category
             )
         except Exception as e:
@@ -208,15 +207,14 @@ def bulk_upload(file_path: str):
 
     dfs["error"] = dfs.apply(
         lambda x: treat_question(
-                x.Type,
-                [x.Choice1,
-                x.Choice2,
-                x.Choice3,
-                x.Choice4],
+                x.Question,
+                [x['Choice 1'],
+                x['Choice 2'],
+                x['Choice 3'],
+                x['Choice 4']],
                 x.Answer,
                 x.Country,
-                x.Question,
-                x.SubCategory
+                x['Sub Type']
             ), axis=1)
-
+    print(dfs)
     return dfs

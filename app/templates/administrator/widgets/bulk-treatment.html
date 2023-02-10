@@ -5,7 +5,6 @@
     <thead class="bg-light">
       <tr>
         <th>{% trans "Question" %}</th>
-        <th>{% trans "Type" %}</th>
         <th>{% trans "Country" %}</th>
         <th>{% trans "Sub Category" %}</th>
         <th class="text-center">{% trans "Status" %}</th>
@@ -13,28 +12,19 @@
     </thead>
     <tbody>
         {% for index, row in treatment_result.iterrows %}
-            {% if row.11 != '' %}
+            {% if row.8 != '' %}
             <tr style="background:rgb(255 220 220)">
                 <td>
                     {{row.0}}
                 </td>
                 <td>
-                {% if row.1 == 'Multiple Choices' %}
-                    <span class="badge badge-warning rounded-pill d-inline">Multiple choices</span>
-                {% elif row.1 == 'Free Text' %}
-                    <span class="badge badge-primary rounded-pill d-inline">Free text</span>
-                {% else %}
-                    <span class="badge badge-info rounded-pill d-inline">True or false</span>
-                {% endif %}
+                    {{row.6}}
                 </td>
                 <td>
-                    {{row.3}}
-                </td>
-                <td>
-                    {{row.2}}
+                    {{row.7}}
                 </td>
                 <td class="text-center">
-                    <span title="{{row.11}}" class="error_details badge bg bg-danger"><i class="fas fa-exclamation"></i></span>
+                    <span title="{{row.8}}" class="error_details badge bg bg-danger"><i class="fas fa-exclamation"></i></span>
                 </td>
             </tr>
             {% else %}
@@ -43,13 +33,10 @@
                     {{row.0}}
                 </td>
                 <td>
-                    {{row.1}}
+                    {{row.6}}
                 </td>
                 <td>
-                    {{row.3}}
-                </td>
-                <td>
-                    {{row.2}}
+                    {{row.7}}
                 </td>
                 <td class="text-center">
                     <span class="badge bg bg-success"><i class="fas fa-check"></i></span>

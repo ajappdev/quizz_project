@@ -15,6 +15,7 @@ urlpatterns = [
     path('administrator/initial-settings/', av.initial_settings_upload, name='initial_settings_upload'),
     path('auth/register/', av.register, name='register'),
     path('ajax-calls/', av.ajax_calls, name='ajax_calls'),
+    path('download-excel-template/', av.download_excel_template, name='download_excel_template'),
     path('upload-questions-file/', av.upload_questions_file, name='upload_questions_file'),
 ]
 
