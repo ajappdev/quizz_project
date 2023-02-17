@@ -63,10 +63,10 @@ def landing_page(request):
 def admin_settings(request):
     template = 'administrator/settings.html'
 
-    regions = am.Region.objects.all()
-    categories = am.Category.objects.all()
-    countries = am.Country.objects.all()
-    sub_categories = am.SubCategory.objects.all()
+    regions = am.Region.objects.filter(id__gte=0).order_by("name")
+    categories = am.Category.objects.filter(id__gte=0).order_by("name")
+    countries = am.Country.objects.filter(id__gte=0).order_by("name")
+    sub_categories = am.SubCategory.objects.filter(id__gte=0).order_by("name")
     context = {
         "regions": regions,
         "categories": categories,
@@ -714,9 +714,12 @@ def ajax_calls(request):
                 try:
                     new_country = am.Country()
                     new_country.name=received_json_data['country_name']
-                    new_country.region=am.Region.objects.get(
-                        id=int(received_json_data['region_id']))
                     new_country.save()
+
+                    for region in received_json_data['region_id']:
+                        new_country.region.add(am.Region.objects.get(id=int(region)))
+                        new_country.save()
+
                     new_country_id = new_country.id
                 except Exception as e:
                     error_text = "EXCEPTION, AJAX_CALLS, ADD_COUNTRY, 1, " + str(e)
@@ -747,9 +750,13 @@ def ajax_calls(request):
                 try:
                     am.Country.objects.filter(
                         id=int(received_json_data['country_id'])).update(
-                            name=received_json_data['country_name'],
-                            region=am.Region.objects.get(
-                                id=int(received_json_data['country_region'])))
+                            name=received_json_data['country_name'])
+                    country = am.Country.objects.get(
+                        id=int(received_json_data['country_id']))
+                    country.region.clear()
+                    for region in received_json_data['country_region']:
+                        country.region.add(am.Region.objects.get(id=int(region)))
+                        country.save()
                 except Exception as e:
                     error_text = "EXCEPTION, AJAX_CALLS, UPDATE_COUNTRY, 1, " + str(e)
                     error = 1
@@ -766,9 +773,10 @@ def ajax_calls(request):
                 try:
                     new_sub_category = am.SubCategory()
                     new_sub_category.name=received_json_data['sub_category_name']
-                    new_sub_category.category=am.Category.objects.get(
-                        id=int(received_json_data['parent_category_id']))
                     new_sub_category.save()
+                    for category in received_json_data['parent_category_id']:
+                        new_sub_category.category.add(am.Category.objects.get(id=int(category)))
+                        new_sub_category.save()
                     new_sub_category_id = new_sub_category.id
                 except Exception as e:
                     error_text = "EXCEPTION, AJAX_CALLS, ADD_SUB_CATEGORY, 1, " + str(e)
@@ -799,9 +807,13 @@ def ajax_calls(request):
                 try:
                     am.SubCategory.objects.filter(
                         id=int(received_json_data['sub_category_id'])).update(
-                            name=received_json_data['sub_category_name'],
-                            category=am.Category.objects.get(
-                                id=int(received_json_data['sub_category_parent_category'])))
+                            name=received_json_data['sub_category_name'])
+                    sub_category = am.SubCategory.objects.get(
+                        id=int(received_json_data['sub_category_id']))
+                    sub_category.category.clear()
+                    for category in received_json_data['sub_category_parent_category']:
+                        sub_category.category.add(am.Category.objects.get(id=int(category)))
+                        sub_category.save()
                 except Exception as e:
                     error_text = "EXCEPTION, AJAX_CALLS, UPDATE_SUB_CATEGORY, 1, " + str(e)
                     error = 1

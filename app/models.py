@@ -47,7 +47,7 @@ class Country(models.Model):
     """
     name = models.CharField(
         max_length=300, null=False, blank=False)
-    region = models.ForeignKey(Region, on_delete=models.CASCADE)
+    region = models.ManyToManyField(Region)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -74,7 +74,7 @@ class SubCategory(models.Model):
     """
     name = models.CharField(
         max_length=300, null=False, blank=False)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ManyToManyField(Category)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
