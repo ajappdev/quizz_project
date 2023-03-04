@@ -182,6 +182,7 @@ def check_bulk_upload(file_path: str):
         return error_return
     # Check if the file contains the right columns
     if dfs.columns.tolist() != [
+            'N',
             'Question',
             'Choice 1',
             'Choice 2',
@@ -233,5 +234,5 @@ def bulk_upload(file_path: str):
                 x.Country,
                 x['Sub Type']
             ), axis=1)
-    print(dfs)
+
     return dfs

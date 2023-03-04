@@ -692,364 +692,650 @@ def initial_settings():
 
 
     #SAVE COUNTRIES
-    region_africa = am.Region()
-    region_africa.name = "Africa"
-    region_africa.save()
 
-    africa_countries = ["Algeria",
-    "Angola",
-    "Benin",
-    "Botswana",
-    "Burkina",
-    "Burundi",
-    "Cameroon",
-    "Cape Verde",
-    "Central African Republic",
-    "Chad",
-    "Comoros",
-    "Congo",
-    "Democratic Republic of Congo",
-    "Djibouti",
-    "Egypt",
-    "Equatorial Guinea",
-    "Eritrea",
-    "Ethiopia",
-    "Gabon",
-    "Gambia",
-    "Ghana",
-    "Guinea",
-    "Guinea-Bissau",
-    "Ivory Coast",
-    "Kenya",
-    "Lesotho",
-    "Liberia",
-    "Libya",
-    "Madagascar",
-    "Malawi",
-    "Mali",
-    "Mauritania",
-    "Mauritius",
-    "Morocco",
-    "Mozambique",
-    "Namibia",
-    "Niger",
-    "Nigeria",
-    "Rwanda",
-    "Sao Tome and Principe",
-    "Senegal",
-    "Seychelles",
-    "Sierra Leone",
-    "Somalia",
-    "South Africa",
-    "South Sudan",
-    "Sudan",
-    "Swaziland",
-    "Tanzania",
-    "Togo",
-    "Tunisia",
-    "Uganda",
-    "Zambia",
-    "Zimbabwe"]
+    ####################################################
+    ####################################################
 
-    for country in africa_countries:
-        new_country = am.Country()
-        new_country.name = country
-        new_country.save()
-        new_country.region.add(region_africa)
+    new_region = am.Region()
+    new_region.name = "Others"
+    new_region.save()
+
+    countries = [
+        'Australia',
+        'France',
+        'Others',
+        'Peru',
+        'Russia',
+        'Singapore',
+        'U.S.',
+        'Venezuela',
+        'World'
+        ]
+
+    for country in countries:
+        if len(am.Country.objects.filter(name=country)) > 0:
+            new_country = am.Country.objects.filter(name=country)[0]
+        else:
+            new_country = am.Country()
+            new_country.name = country
+            new_country.save()
+            
+        new_country.region.add(new_region)
         new_country.save()
 
-    region_europe = am.Region()
-    region_europe.name = "Europe"
-    region_europe.save()
+    ####################################################
+    ####################################################
 
-    europe_countries = [
-        "Albania",
-        "Andorra",
-        "Armenia",
-        "Austria",
-        "Azerbaijan",
-        "Belarus",
-        "Belgium",
-        "Bosnia and Herzegovina",
-        "Bulgaria",
-        "Croatia",
-        "Cyprus",
-        "Czech Republic",
-        "Denmark",
-        "Estonia",
-        "Finland",
-        "France",
-        "Georgia",
-        "Germany",
-        "Greece",
-        "Hungary",
-        "Iceland",
-        "Ireland",
-        "Italy",
-        "Latvia",
-        "Liechtenstein",
-        "Lithuania",
-        "Luxembourg",
-        "Macedonia",
-        "Malta",
-        "Moldova",
-        "Monaco",
-        "Montenegro",
-        "Netherlands",
-        "Norway",
-        "Poland",
-        "Portugal",
-        "Romania",
-        "Russia",
-        "San Marino",
-        "Serbia",
-        "Slovakia",
-        "Slovenia",
-        "Spain",
-        "Sweden",
-        "Switzerland",
-        "Ukraine",
-        "United Kingdom",
-        "Vatican City"
-    ]   
+    new_region = am.Region()
+    new_region.name = "Africa"
+    new_region.save()
 
-    for country in europe_countries:
-        new_country = am.Country()
-        new_country.name = country
-        new_country.save()
-        new_country.region.add(region_europe)
-        new_country.save()
+    countries = [
+        'Algeria',
+        'Angola',
+        'Benin',
+        'Botswana',
+        'Burkina Faso',
+        'Burundi',
+        'Cameroon',
+        'Cape Verde',
+        'Central African Republic',
+        'Chad',
+        'Comoros',
+        "Cote d'Ivoire",
+        'Democratic Republic of the Congo',
+        'Djibouti',
+        'Ecuador',
+        'Egypt',
+        'Equatorial Guinea',
+        'Eritrea',
+        'eSwatini',
+        'Ethiopia',
+        'Gabon',
+        'Gambia',
+        'Ghana',
+        'Guinea',
+        'Guinea Bissau',
+        'Kenya',
+        'Lebanon',
+        'Lesotho',
+        'Liberia',
+        'Libya',
+        'Madagascar',
+        'Madagaskar',
+        'Malawi',
+        'Mali',
+        'Mauritania',
+        'Mauritius',
+        'MB32',
+        'Mongolia',
+        'Morocco',
+        'Morocco ',
+        'Mozambique',
+        'Namibia',
+        'Niger',
+        'Nigeria',
+        'Others',
+        'Republic of the Congo',
+        'Rwanda',
+        'Rwanda',
+        'Sao Tome and Principe',
+        'São Tomé and Príncipe',
+        'Senegal',
+        'Seychelles',
+        'Sierra Leone',
+        'Somalia',
+        'South Africa',
+        'South Sudan',
+        'Sudan',
+        'Syria',
+        'Tanzania',
+        'Togo',
+        'Tonga',
+        'Tunisia',
+        'U.K.',
+        'Uganda',
+        'Western Sahara',
+        'Yemen',
+        'Zambia',
+        'Zimbabwe',
+        ]
 
-    region_asia = am.Region()
-    region_asia.name = "Asia"
-    region_asia.save()
-
-    asia_countries = [
-        "Afghanistan",
-        "Bahrain",
-        "Bangladesh",
-        "Bhutan",
-        "Brunei",
-        "Myanmar",
-        "Cambodia",
-        "China",
-        "East Timor",
-        "Indonesia",
-        "Iran",
-        "Iraq",
-        "Israel",
-        "Japan",
-        "Jordan",
-        "Kazakhstan",
-        "North Korea",
-        "South Korea",
-        "Kuwait",
-        "Kyrgyzstan",
-        "Laos",
-        "Lebanon",
-        "Malaysia",
-        "Maldives",
-        "Mongolia",
-        "Nepal",
-        "Oman",
-        "Pakistan",
-        "Philippines",
-        "Qatar",
-        "Russia",
-        "Saudi Arabia",
-        "Singapore",
-        "Sri Lanka",
-        "Syria",
-        "Tajikistan",
-        "Thailand",
-        "Turkey",
-        "Turkmenistan",
-        "United Arab Emirates",
-        "Uzbekistan",
-        "Vietnam",
-        "Yemen",
-        "India"
-    ]   
-
-    for country in asia_countries:
-        new_country = am.Country()
-        new_country.name = country
-        new_country.save()
-        new_country.region.add(region_asia)
-        new_country.save()
-
-    region_north_america = am.Region()
-    region_north_america.name = "North America"
-    region_north_america.save()
-
-    norh_america_countries = [
-        "Belize",
-        "Canada",
-        "Costa Rica",
-        "El Salvador",
-        "Grenada",
-        "Guatemala",
-        "Honduras",
-        "Mexico",
-        "Nicaragua",
-        "Panama"
-    ]   
-
-    for country in norh_america_countries:
-        new_country = am.Country()
-        new_country.name = country
-        new_country.save()
-        new_country.region.add(region_north_america)
-        new_country.save()
-
-    region_south_america = am.Region()
-    region_south_america.name = "South America"
-    region_south_america.save()
-
-    south_america_countries = [
-        "Argentina",
-        "Bolivia",
-        "Brazil",
-        "Chile",
-        "Colombia",
-        "Ecuador",
-        "Guyana",
-        "Paraguay",
-        "Peru",
-        "Suriname",
-        "Uruguay",
-        "Venezuela"
-    ]   
-
-    for country in south_america_countries:
-        new_country = am.Country()
-        new_country.name = country
-        new_country.save()
-        new_country.region.add(region_south_america)
-        new_country.save()
-
-    region_australia = am.Region()
-    region_australia.name = "Australia"
-    region_australia.save()
-
-    australia_countries = [
-        "Fiji",
-        "Kiribati",
-        "Marshall Islands",
-        "Micronesia",
-        "Nauru",
-        "New Zealand",
-        "Palau",
-        "Papua New Guinea",
-        "Samoa",
-        "Solomon Islands",
-        "Tonga",
-        "Tuvalu",
-        "Vanuatu",
-        "Australia"
-    ]   
-
-    for country in australia_countries:
-        new_country = am.Country()
-        new_country.name = country
-        new_country.save()
-        new_country.region.add(region_australia)
+    for country in countries:
+        if len(am.Country.objects.filter(name=country)) > 0:
+            new_country = am.Country.objects.filter(name=country)[0]
+        else:
+            new_country = am.Country()
+            new_country.name = country
+            new_country.save()
+            
+        new_country.region.add(new_region)
         new_country.save()
 
 
-    region_carriban = am.Region()
-    region_carriban.name = "Caribbean"
-    region_carriban.save()
+    ####################################################
+    ####################################################
 
-    carriban_countries = [
-        "Cuba",
-        "Haiti",
-        "Dominican Republic",
-        "Antigua and Barbuda",
-        "Jamaica",
-        "Trinidad and Tobago",
-        "Bahamas",
-        "Barbados",
-        "Saint Lucia",
-        "Saint Vincent and the Grenadines",
-        "Dominica",
-        "Grenada",
-        "Saint Kitts and Nevis"
-    ]   
+    new_region = am.Region()
+    new_region.name = "Antarctica"
+    new_region.save()
 
-    for country in carriban_countries:
-        new_country = am.Country()
-        new_country.name = country
-        new_country.save()
-        new_country.region.add(region_carriban)
+    countries = [
+        'Antarctica',
+        'Others',
+        ]
+
+    for country in countries:
+        if len(am.Country.objects.filter(name=country)) > 0:
+            new_country = am.Country.objects.filter(name=country)[0]
+        else:
+            new_country = am.Country()
+            new_country.name = country
+            new_country.save()
+            
+        new_country.region.add(new_region)
         new_country.save()
 
+    ####################################################
+    ####################################################
 
-    region_us = am.Region()
-    region_us.name = "United states"
-    region_us.save()
+    new_region = am.Region()
+    new_region.name = "Asia"
+    new_region.save()
 
-    us_countries = [
-        "Alabama",
-        "Alaska",
-        "Arizona",
-        "Arkansas",
-        "California",
-        "Colorado",
-        "Connecticut",
-        "Delaware",
-        "Florida",
-        "Georgia",
-        "Hawaii",
-        "Idaho",
-        "Illinois",
-        "Indiana",
-        "Iowa",
-        "Kansas",
-        "Kentucky",
-        "Louisiana",
-        "Maine",
-        "Maryland",
-        "Massachusetts",
-        "Michigan",
-        "Minnesota",
-        "Mississippi",
-        "Missouri",
-        "Montana",
-        "Nebraska",
-        "Nevada",
-        "New Hampshire",
-        "New Jersey",
-        "New Mexico",
-        "New York",
-        "North Carolina",
-        "North Dakota",
-        "Ohio",
-        "Oklahoma",
-        "Oregon",
-        "Pennsylvania",
-        "Rhode Island",
-        "South Carolina",
-        "South Dakota",
-        "Tennessee",
-        "Texas",
-        "Utah",
-        "Vermont",
-        "Virginia",
-        "Washington",
-        "West Virginia",
-        "Wisconsin",
-        "Wyoming",
-        "Guam",
-        "American Samoa",
-        "Northern Mariana Islands",
-        "Puerto Rico",
-        "US Virgin Islands"
-    ]   
+    countries = [
+        'Afghanistan',
+        'Armenia',
+        'Asia',
+        'Azerbaijan',
+        'Bahrain',
+        'Bangladesh',
+        'Bhutan',
+        'Brunei',
+        'Cambodia',
+        'China',
+        'Cyprus',
+        'East Timor',
+        'Egypt',
+        'Fiji',
+        'France',
+        'Georgia',
+        'Ghana',
+        'Greece',
+        'Hong Kong',
+        'India',
+        'Indonesia',
+        'Iran',
+        'Iraq',
+        'Ireland',
+        'Israel',
+        'Japan',
+        'Jordan',
+        'Kazakhstan',
+        'Kazakhstan  ',
+        'Khazakhstan',
+        'Korean',
+        'Kuwait',
+        'Kyrgyzstan',
+        'Kyrgzstan',
+        'Laos',
+        'Lebanon',
+        'Macau',
+        'Malaysia',
+        'Maldives',
+        'Mauritius',
+        'Mongolia',
+        'Mozambique',
+        'Myanmar',
+        'Nepal',
+        'North Korea',
+        'Oman',
+        'Others',
+        'Pakistan',
+        'Palestine',
+        'Papa New Guinea',
+        'Papua New Guinea',
+        'Philippines',
+        'Phillippines',
+        'Qatar',
+        'Russia',
+        'Saudi Arabia',
+        'Seychelles',
+        'Singapore',
+        'South Korea',
+        'Sri Lanka',
+        'Syria',
+        'Taiwan',
+        'Tajikistan',
+        'Thailand',
+        'Timor Leste',
+        'Timor-Leste',
+        'Turkey',
+        'Turkmenistan',
+        'U.S.',
+        'UAE',
+        'United Arab Emirates',
+        'Uzbekistan',
+        'Vietnam',
+        'Yemen',
+        ]
 
-    for country in us_countries:
-        new_country = am.Country()
-        new_country.name = country
+    for country in countries:
+        if len(am.Country.objects.filter(name=country)) > 0:
+            new_country = am.Country.objects.filter(name=country)[0]
+        else:
+            new_country = am.Country()
+            new_country.name = country
+            new_country.save()
+            
+        new_country.region.add(new_region)
         new_country.save()
-        new_country.region.add(region_us)
+
+
+    ####################################################
+    ####################################################
+
+    new_region = am.Region()
+    new_region.name = "Australia"
+    new_region.save()
+
+    countries = [
+        ' Australia ',
+        'Australia',
+        'Australia ',
+        'Federated States of Micronesia',
+        'France',
+        'Marshall Islands',
+        'Micronesia',
+        'Nauru',
+        'New Zealand',
+        'Others',
+        'Palau',
+        'Papua New Guinea',
+        'Samoa',
+        'Solomon Islands',
+        'Tonga',
+        'Tuvalu',
+        'Vanuatu',
+        ]
+
+    for country in countries:
+        if len(am.Country.objects.filter(name=country)) > 0:
+            new_country = am.Country.objects.filter(name=country)[0]
+        else:
+            new_country = am.Country()
+            new_country.name = country
+            new_country.save()
+            
+        new_country.region.add(new_region)
+        new_country.save()
+
+
+    ####################################################
+    ####################################################
+
+    new_region = am.Region()
+    new_region.name = "Carribean"
+    new_region.save()
+
+    countries = [
+        'Antigua and Barbuda',
+        'Bahamas',
+        'Barbados',
+        'Cuba',
+        'Dominica',
+        'Dominican Republic',
+        'Grenada',
+        'Guyana',
+        'Haiti',
+        'Jamaica',
+        'Others',
+        'São Tomé and Príncipe',
+        'St Kitts and Nevis',
+        'St. Kitts and Nevis',
+        'St. Vincent and Grenadines',
+        'St. Vincent and the Grenadines',
+        'St.Kitts and Nevis',
+        'St.Lucia',
+        'St.Vincent and Grenadines',
+        'St.Vincent and the Grenadines',
+        'Trinidad and Tobago',
+        'Venezuela',
+        ]
+
+    for country in countries:
+        if len(am.Country.objects.filter(name=country)) > 0:
+            new_country = am.Country.objects.filter(name=country)[0]
+        else:
+            new_country = am.Country()
+            new_country.name = country
+            new_country.save()
+            
+        new_country.region.add(new_region)
+        new_country.save()
+
+
+    ####################################################
+    ####################################################
+
+    new_region = am.Region()
+    new_region.name = "China"
+    new_region.save()
+
+    countries = [
+        'Mongolia',
+        'Philippines',
+        ]
+
+    for country in countries:
+        if len(am.Country.objects.filter(name=country)) > 0:
+            new_country = am.Country.objects.filter(name=country)[0]
+        else:
+            new_country = am.Country()
+            new_country.name = country
+            new_country.save()
+            
+        new_country.region.add(new_region)
+        new_country.save()
+
+
+    ####################################################
+    ####################################################
+
+    new_region = am.Region()
+    new_region.name = "China"
+    new_region.save()
+
+    countries = [
+        'Mongolia',
+        'Philippines',
+        ]
+
+    for country in countries:
+        if len(am.Country.objects.filter(name=country)) > 0:
+            new_country = am.Country.objects.filter(name=country)[0]
+        else:
+            new_country = am.Country()
+            new_country.name = country
+            new_country.save()
+            
+        new_country.region.add(new_region)
+        new_country.save()
+
+
+    ####################################################
+    ####################################################
+
+    new_region = am.Region()
+    new_region.name = "Oceania"
+    new_region.save()
+
+    countries = [
+        'Australia',
+        'Federated States of Micronesia',
+        'Fiji',
+        'Kiribati',
+        'Marshall Islands',
+        'Nauru',
+        'New Zealand',
+        'Others',
+        'Palau',
+        'Papua New Guinea',
+        'Samoa',
+        'Tahiti',
+        'Timor-Leste',
+        'Tonga',
+        'Tuvalu',
+        'U.S.',
+        'Vanuatu',
+        ]
+
+    for country in countries:
+        if len(am.Country.objects.filter(name=country)) > 0:
+            new_country = am.Country.objects.filter(name=country)[0]
+        else:
+            new_country = am.Country()
+            new_country.name = country
+            new_country.save()
+            
+        new_country.region.add(new_region)
+        new_country.save()
+
+    ####################################################
+    ####################################################
+
+    new_region = am.Region()
+    new_region.name = "South America"
+    new_region.save()
+
+    countries = [
+        'Argentina',
+        'Bolivia',
+        'Brazil',
+        'Chile',
+        'Colombia',
+        'Ecuador',
+        'Ecudaor',
+        'France',
+        'Guatemala',
+        'Guyana',
+        'Others',
+        'Panama',
+        'Paraguay',
+        'Peru',
+        'Suriname',
+        'Uruguay',
+        'Venezuela',
+        ]
+
+    for country in countries:
+        if len(am.Country.objects.filter(name=country)) > 0:
+            new_country = am.Country.objects.filter(name=country)[0]
+        else:
+            new_country = am.Country()
+            new_country.name = country
+            new_country.save()
+            
+        new_country.region.add(new_region)
+        new_country.save()
+
+
+    ####################################################
+    ####################################################
+
+    new_region = am.Region()
+    new_region.name = "South Dakota"
+    new_region.save()
+
+    countries = [
+        'Colombia',
+        'U.S.',
+        ]
+
+    for country in countries:
+        if len(am.Country.objects.filter(name=country)) > 0:
+            new_country = am.Country.objects.filter(name=country)[0]
+        else:
+            new_country = am.Country()
+            new_country.name = country
+            new_country.save()
+            
+        new_country.region.add(new_region)
+        new_country.save()
+
+
+
+    ####################################################
+    ####################################################
+
+    new_region = am.Region()
+    new_region.name = "Territory"
+    new_region.save()
+
+    countries = [
+        'Denmark',
+        'France',
+        'Netherlands',
+        'New Zealand',
+        'Spain',
+        'U.K.',
+        'U.S.',
+        ]
+
+    for country in countries:
+        if len(am.Country.objects.filter(name=country)) > 0:
+            new_country = am.Country.objects.filter(name=country)[0]
+        else:
+            new_country = am.Country()
+            new_country.name = country
+            new_country.save()
+            
+        new_country.region.add(new_region)
+        new_country.save()
+
+
+    ####################################################
+    ####################################################
+
+    new_region = am.Region()
+    new_region.name = "North America"
+    new_region.save()
+
+    countries = [
+        'Bahamas',
+        'Barbados',
+        'Belize',
+        'Bermuda',
+        'Canada',
+        'Colombia',
+        'Costa Rica',
+        'Cuba',
+        'Dominica',
+        'Dominican Republic',
+        'El Salvador',
+        'France',
+        'Greenland',
+        'Grenada',
+        'Guam',
+        'Guatemala',
+        'Haiti',
+        'Honduras',
+        'Idaho',
+        'Jamaica',
+        'Marshall Islands',
+        'Maryland',
+        'Mexico',
+        'Michigan',
+        'Netherlands',
+        'Nevada',
+        'New Jersey',
+        'New York',
+        'Nicaragua',
+        'Northern Mariana Islands',
+        'Others',
+        'Panama',
+        'Solentiname Islands',
+        'South Dakota',
+        'Texas',
+        'Trinidad & Tobago',
+        'Trinidad and Tobago',
+        'Trinidad and Tobago ',
+        'U.K.',
+        'U.S.',
+        'Virginia',
+        ]
+
+    for country in countries:
+        if len(am.Country.objects.filter(name=country)) > 0:
+            new_country = am.Country.objects.filter(name=country)[0]
+        else:
+            new_country = am.Country()
+            new_country.name = country
+            new_country.save()
+            
+        new_country.region.add(new_region)
+        new_country.save()
+
+
+
+    ####################################################
+    ####################################################
+
+    new_region = am.Region()
+    new_region.name = "Europe"
+    new_region.save()
+
+    countries = [
+        'Albania',
+        'Andorra',
+        'Austria',
+        'Belarus',
+        'Belgium',
+        'Bosnia and Herzegovina',
+        'Brazil',
+        'Bulgaria',
+        'Croatia',
+        'Czech Republic',
+        'Denmark',
+        'Estonia',
+        'Finland',
+        'France',
+        'Georgia',
+        'Germany',
+        'Greece',
+        'Greenland',
+        'Hungary',
+        'Iceland',
+        'Ireland',
+        'Italy',
+        'Kosovo',
+        'Latvia',
+        'Liechtenstein',
+        'Lithuania',
+        'Luxembourg',
+        'Malta',
+        'Moldova',
+        'Monaco',
+        'Montenegro',
+        'Morocco',
+        'Netherlands',
+        'Nort Macedonia',
+        'North Macedonia',
+        'Norway',
+        'Others',
+        'Poland',
+        'Portugal',
+        'Romania',
+        'Russia',
+        'San Marino',
+        'Scotland',
+        'Serbia',
+        'Sisak',
+        'Slovakia',
+        'Slovenia',
+        'Spain',
+        'Split',
+        'Sweden',
+        'Switzerland',
+        'Tajikistan',
+        'Tanzania',
+        'The Kornati Islands or  Stomorski Islands',
+        'Turkey',
+        'U.K.',
+        'Ukraine',
+        'United Kingdom',
+        'Vatican City',
+        'Wales',
+        'Zadar',
+        ]
+
+    for country in countries:
+        if len(am.Country.objects.filter(name=country)) > 0:
+            new_country = am.Country.objects.filter(name=country)[0]
+        else:
+            new_country = am.Country()
+            new_country.name = country
+            new_country.save()
+            
+        new_country.region.add(new_region)
         new_country.save()

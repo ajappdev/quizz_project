@@ -159,10 +159,21 @@ def upload_questions_file(request):
         error_upload = m01.check_bulk_upload(file_path)
         if error_upload == "":
             treatment_result = m01.bulk_upload(file_path)
+
+            success_questions = treatment_result.loc[
+                (treatment_result['error'] == ''), 'Question'].count()
+            failed_questions = treatment_result.loc[
+                (treatment_result['error'] != ''), 'Question'].count()
+            
+            treatment_result = treatment_result.loc[
+                (treatment_result['error'] != '')]
+
             html = render_to_string(
                 template_name="administrator/widgets/bulk-treatment.html",
                 context={
                     "treatment_result": treatment_result,
+                    "success_questions": success_questions,
+                    "failed_questions": failed_questions,      
                 }
             )
             data_dict = {"error": "", "html": html}
@@ -523,13 +534,14 @@ def ajax_calls(request):
                 pass
 
 
-
+            length_result = len(questions)
             questions_list = m00.pagination(page, 10, questions)
 
             html = render_to_string(
                         template_name="administrator/questions-table.html", 
                         context={
                             "questions": questions_list,
+                            "length_result": length_result,
                         }
                     )
             data_dict = {"html": html}
