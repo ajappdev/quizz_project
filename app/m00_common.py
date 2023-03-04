@@ -163,7 +163,6 @@ def initial_settings():
             'Olympics',
             'Only Country',
             'Only State',
-            'Others',
             'Religion',
             'Rivers',
             'School Bee',
@@ -225,7 +224,6 @@ def initial_settings():
             'Numerical Geo',
             'Odd Item Out',
             'Only Country',
-            'Others',
             'Population',
             'Port City',
             'Producer',
@@ -319,7 +317,6 @@ def initial_settings():
         'Odd Item Out',
         'Only Country',
         'Origin',
-        'Others',
         'Politics',
         'Population',
         'President',
@@ -464,9 +461,7 @@ def initial_settings():
     new_category.save()
 
     sub_categories = [
-        'Analogy',
-        'Comparison',
-        'Others',
+        'Others'
         ]
 
     for sub_category in sub_categories:
@@ -648,7 +643,6 @@ def initial_settings():
         'Only Place',
         'Only State',
         'Other Capital',
-        'Others',
         'Peninsula',
         'Plateau',
         'Port City',
@@ -701,15 +695,7 @@ def initial_settings():
     new_region.save()
 
     countries = [
-        'Australia',
-        'France',
-        'Others',
-        'Peru',
-        'Russia',
-        'Singapore',
-        'U.S.',
-        'Venezuela',
-        'World'
+        'Others'
         ]
 
     for country in countries:
@@ -775,7 +761,6 @@ def initial_settings():
         'Namibia',
         'Niger',
         'Nigeria',
-        'Others',
         'Republic of the Congo',
         'Rwanda',
         'Rwanda',
@@ -822,7 +807,6 @@ def initial_settings():
 
     countries = [
         'Antarctica',
-        'Others',
         ]
 
     for country in countries:
@@ -890,7 +874,6 @@ def initial_settings():
         'Nepal',
         'North Korea',
         'Oman',
-        'Others',
         'Pakistan',
         'Palestine',
         'Papa New Guinea',
@@ -940,16 +923,13 @@ def initial_settings():
     new_region.save()
 
     countries = [
-        ' Australia ',
         'Australia',
-        'Australia ',
         'Federated States of Micronesia',
         'France',
         'Marshall Islands',
         'Micronesia',
         'Nauru',
         'New Zealand',
-        'Others',
         'Palau',
         'Papua New Guinea',
         'Samoa',
@@ -989,7 +969,6 @@ def initial_settings():
         'Guyana',
         'Haiti',
         'Jamaica',
-        'Others',
         'São Tomé and Príncipe',
         'St Kitts and Nevis',
         'St. Kitts and Nevis',
@@ -1043,30 +1022,6 @@ def initial_settings():
     ####################################################
 
     new_region = am.Region()
-    new_region.name = "China"
-    new_region.save()
-
-    countries = [
-        'Mongolia',
-        'Philippines',
-        ]
-
-    for country in countries:
-        if len(am.Country.objects.filter(name=country)) > 0:
-            new_country = am.Country.objects.filter(name=country)[0]
-        else:
-            new_country = am.Country()
-            new_country.name = country
-            new_country.save()
-            
-        new_country.region.add(new_region)
-        new_country.save()
-
-
-    ####################################################
-    ####################################################
-
-    new_region = am.Region()
     new_region.name = "Oceania"
     new_region.save()
 
@@ -1078,7 +1033,6 @@ def initial_settings():
         'Marshall Islands',
         'Nauru',
         'New Zealand',
-        'Others',
         'Palau',
         'Papua New Guinea',
         'Samoa',
@@ -1119,7 +1073,6 @@ def initial_settings():
         'France',
         'Guatemala',
         'Guyana',
-        'Others',
         'Panama',
         'Paraguay',
         'Peru',
@@ -1138,31 +1091,6 @@ def initial_settings():
             
         new_country.region.add(new_region)
         new_country.save()
-
-
-    ####################################################
-    ####################################################
-
-    new_region = am.Region()
-    new_region.name = "South Dakota"
-    new_region.save()
-
-    countries = [
-        'Colombia',
-        'U.S.',
-        ]
-
-    for country in countries:
-        if len(am.Country.objects.filter(name=country)) > 0:
-            new_country = am.Country.objects.filter(name=country)[0]
-        else:
-            new_country = am.Country()
-            new_country.name = country
-            new_country.save()
-            
-        new_country.region.add(new_region)
-        new_country.save()
-
 
 
     ####################################################
@@ -1232,7 +1160,6 @@ def initial_settings():
         'New York',
         'Nicaragua',
         'Northern Mariana Islands',
-        'Others',
         'Panama',
         'Solentiname Islands',
         'South Dakota',
@@ -1240,7 +1167,6 @@ def initial_settings():
         'Trinidad & Tobago',
         'Trinidad and Tobago',
         'Trinidad and Tobago ',
-        'U.K.',
         'U.S.',
         'Virginia',
         ]
@@ -1255,7 +1181,6 @@ def initial_settings():
             
         new_country.region.add(new_region)
         new_country.save()
-
 
 
     ####################################################
@@ -1302,7 +1227,6 @@ def initial_settings():
         'Nort Macedonia',
         'North Macedonia',
         'Norway',
-        'Others',
         'Poland',
         'Portugal',
         'Romania',
