@@ -7,6 +7,7 @@ from django.template.loader import render_to_string
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 from django.core.files.storage import FileSystemStorage
+from django.contrib.auth.decorators import login_required
 
 # GENERAL DECLARATIONS
 import pandas as pd
@@ -29,7 +30,7 @@ import app.m01_question as m01
 
 def register(request):
     register_form = af.RegisterForm()
-    registration_errors = ""
+    error_to_show = ""
     if request.method == "POST":
         register_form = af.RegisterForm(request.POST)
         if register_form.is_valid():
@@ -37,29 +38,59 @@ def register(request):
 
             user_profile = am.UserProfile()
             user_profile.user = user
+            user_profile.role = "Student"
             user_profile.username = request.POST['username']
             user_profile.save()
 
             login(request, user)
 
             return redirect("/")
+
         else:
-            registration_errors = register_form.errors
+            registration_errors = json.loads(register_form.errors.as_json())
+            for k, v in registration_errors.items():
+                error_to_show = v[0]['message']
 
     template = 'registration/register.html'
     context = {
         "register_form": register_form,
-        "registration_errors": registration_errors}
+        "error_to_show": error_to_show}
     return render(request, template, context)
 
 
 def landing_page(request):
-    template = 'blank.html'
+    if request.user.id:
+        if request.user.user_profile.role == "Administrator":
+            return redirect("administrator/dashboard/")
+        if request.user.user_profile.role == "Student":
+            return redirect("student/dashboard/")
+    else:
+        return redirect("quizz/")
+    context = {}
+    template = "blank.html"
+    return render(request, template, context)
 
+
+@login_required(login_url='login/')
+def dashboard_admin(request):
+    template = 'administrator/dashboard.html'
     context = {}
     return render(request, template, context)
 
 
+@login_required(login_url='login/')
+def dashboard_student(request):
+    template = 'student/dashboard.html'
+    context = {}
+    return render(request, template, context)
+
+def quizz(request):
+    template = 'quizz/quizz.html'
+    context = {}
+    return render(request, template, context)
+
+
+@login_required(login_url='login/')
 def admin_settings(request):
     template = 'administrator/settings.html'
 
@@ -76,11 +107,10 @@ def admin_settings(request):
     return render(request, template, context)
 
 
+@login_required(login_url='login/')
 def add_question(request):
-
     countries = am.Country.objects.all()
     sub_categories = am.SubCategory.objects.all()
-
     template = 'administrator/add-update-question.html'
     context = {
         "countries": countries,
@@ -89,6 +119,7 @@ def add_question(request):
     return render(request, template, context)
 
 
+@login_required(login_url='login/')
 def update_question(request, pk: int):
     template = 'administrator/update-question.html'
     question = am.Question.objects.get(id=pk)
@@ -96,6 +127,7 @@ def update_question(request, pk: int):
     return render(request, template, context)
 
 
+@login_required(login_url='login/')
 def bulk_upload_questions(request):
 
     template = 'administrator/bulk-upload-questions.html'
@@ -103,11 +135,9 @@ def bulk_upload_questions(request):
         }
     return render(request, template, context)
 
-
+@login_required(login_url='login/')
 def initial_settings_upload(request):
-    
     m00.initial_settings()
-
     template = 'administrator/initial-settings.html'
     context = {
         }
@@ -115,6 +145,7 @@ def initial_settings_upload(request):
     return render(request, template, context)
 
 
+@login_required(login_url='login/')
 def questions(request):
     template = 'administrator/questions.html'
 
@@ -182,7 +213,7 @@ def upload_questions_file(request):
 
         return JsonResponse(data=data_dict, safe=False)
 
-
+@login_required(login_url='login/')
 def download_excel_template(request):
     df = pd.DataFrame(columns=[
             'N',
@@ -208,6 +239,7 @@ def download_excel_template(request):
         response['Content-Disposition'] = 'attachment; filename=%s' % filename
         return response
 
+@login_required(login_url='login/')
 def ajax_calls(request):
 
     if request.method == 'POST':

@@ -29,12 +29,25 @@
         </a>
         <!-- Left links -->
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          {% if request.user.user_profile.role == "Administrator" %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'dashboard_admin' %}"><i class="fas fa-chart-line"></i> {% trans "Dashboard" %}</a>
+          </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'questions' %}"><i class="fas fa-question"></i> {% trans "Questions" %}</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'admin_settings' %}"><i class="fas fa-gear"></i> {% trans "Settings" %}</a>
           </li>
+          {% endif %}
+          {% if request.user.user_profile.role == "Student" %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'dashboard_student' %}"><i class="fas fa-chart-line"></i> {% trans "Dashboard" %}</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'quizz' %}"><i class="fas fa-list"></i> {% trans "Take quizz" %}</a>
+          </li>
+          {% endif %}
         </ul>
         <!-- Left links -->
       </div>

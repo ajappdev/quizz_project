@@ -11,6 +11,12 @@ QUESTION_TYPES = [
     ("True or False", "True or False"),
     ("Free Text", "Free Text")]
 
+
+USER_ROLES = [
+    ('Student', 'Student'),
+    ('Administrator', 'Administrator')
+]
+
 # DECLARING CLASSES
 
 class UserProfile(models.Model):
@@ -20,6 +26,11 @@ class UserProfile(models.Model):
         max_length=200,
         blank=False,
         null=False)
+    role = models.CharField(
+        max_length=200,
+        blank=False,
+        null=False,
+        choices=USER_ROLES)
     creation = models.DateTimeField(auto_now_add=True)
     modification = models.DateTimeField(auto_now=True)
 
