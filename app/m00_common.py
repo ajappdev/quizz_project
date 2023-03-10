@@ -1339,3 +1339,84 @@ def initial_settings():
             
         new_country.region.add(new_region)
         new_country.save()
+
+    states = [
+              'Alabama',
+                'Alaska',
+                'American Samoa',
+                'Arizona',
+                'Arkansas',
+                'Asia',
+                'California',
+                'Colorado',
+                'Connecticut',
+                'D.C.',
+                'Delaware',
+                'Florida',
+                'Georgia',
+                'Great Lakes',
+                'Guam',
+                'Hawaii',
+                'Idaho',
+                'Illinois',
+                'Indiana',
+                'Iowa',
+                'Kansas',
+                'Kansas City',
+                'Kentucky',
+                'Los Angeles',
+                'Louisiana',
+                'Maine',
+                'Maryland',
+                'Massachusetts',
+                'Michigan',
+                'Minnesota',
+                'Mississippi',
+                'Missouri',
+                'Montana',
+                'Nashville',
+                'Nebraska',
+                'Nevada',
+                'New Hampshire',
+                'New Jersey',
+                'New Mexico',
+                'New York',
+                'North America',
+                'North Carolina',
+                'North Dakota',
+                'Northern Mariana Islands',
+                'Oceania',
+                'Ohio',
+                'Oklahoma',
+                'Oregon',
+                'Others',
+                'Pennsylvania',
+                'Pennsylvania ',
+                'Puerto Rico',
+                'Rhode Island',
+                'South Carolina',
+                'South Dakota',
+                'Tennessee',
+                'Territory',
+                'Texas',
+                'U.S.',
+                'Utah',
+                'Vermont',
+                'Virgin Islands',
+                'Virginia',
+                'Washington',
+                'Washington D.C.',
+                'West Virginia',
+                'Wisconsin',
+                'Wyoming'
+              ]
+    
+    if len(am.Country.objects.filter(name="US")) > 0:
+        new_country = am.Country.objects.filter(name=country)[0]
+    else:
+        new_country = am.Country()
+        new_country.name = country
+        new_country.save()
+        
+    new_country.region.add(new_region)
+    new_country.save()
