@@ -18,7 +18,7 @@ def check_question(
         sub_category: str):
 
     error_return = ""
-    choices_list = [str(c) for c in choices_list if c != '']
+    choices_list = [str(c).strip() for c in choices_list if c != '']
 
     if len(choices_list) == 0:
         question_type = 'Free Text'
@@ -43,14 +43,14 @@ def check_question(
     # Check if a true/false question was provided but neither true or false
     # figure in the lise of choices
     elif question_type == "True or False" and (
-            'true' not in [str(c).lower() for c in choices_list] or
-            'false' not in [str(c).lower() for c in choices_list]):
+            'true' not in [str(c).lower().strip() for c in choices_list] or
+            'false' not in [str(c).lower().strip() for c in choices_list]):
         error_return = "A true/false question was provided but neither true nor false is in the list of choices!"
 
     # Check if a true/false question was provided but neither true or false
     # figure in the right answer
     elif question_type == "True or False" and\
-            str(right_answer).lower() != 'true' and str(right_answer).lower() != 'false':
+            str(right_answer).lower().strip() != 'true' and str(right_answer).lower().strip() != 'false':
         error_return = "A true/false question was provided but either true or false was not provided!"
 
     # Check if a multiple choices question was provided but the choices 
@@ -62,18 +62,18 @@ def check_question(
     # Check if a multiple choices question was provided but the right
     # answer does not figure in the list of choices
     elif question_type == "Multiple Choices" and\
-            right_answer not in choices_list:
+            right_answer.lower().strip() not in [str(c).lower().strip() for c in choices_list]:
         error_return = "A multiple choices question was provided but the answer does not figure in the list of choices!"
 
     elif country != "":
     # Check if the country was provided and exists
-        if len(am.Country.objects.filter(name=country)) == 0:
+        if len(am.Country.objects.filter(name__iexact=country.lower().strip())) == 0:
             error_return = "The country does not exist!"
 
     # Check if the sub category was provided and exists
     elif sub_category != "":
         if len(
-                am.SubCategory.objects.filter(name=sub_category)) == 0:
+                am.SubCategory.objects.filter(name__iexact=sub_category.lower().strip())) == 0:
             error_return = "The sub category does not exist!"
 
     # Check if a all elements are provided and are valid  
@@ -102,7 +102,7 @@ def create_question(
         country,
         sub_category)
 
-    choices_list = [str(c) for c in choices_list if c != '']
+    choices_list = [str(c).strip() for c in choices_list if c != '']
 
     if check == "":
         # Create the question
@@ -117,12 +117,13 @@ def create_question(
         if len(am.Question.objects.filter(question=question)) > 0:
             new_question = am.Question.objects.filter(question=question)[0]
             if country != "":
-                new_question.country = am.Country.objects.filter(name=country)[0]
+                new_question.country = am.Country.objects.filter(
+                    name__iexact=country.lower().strip())[0]
             else:
                 new_question.country = am.Country.objects.filter(name="Others")[0]
             if sub_category != "":
                 new_question.sub_category = am.SubCategory.objects.filter(
-                    name=sub_category)[0]
+                    name__iexact=sub_category.lower().strip())[0]
             else:
                 new_question.sub_category = am.SubCategory.objects.filter(
                     name="Others")[0]
@@ -144,12 +145,13 @@ def create_question(
         else:
             new_question = am.Question()
             if country != "":
-                new_question.country = am.Country.objects.filter(name=country)[0]
+                new_question.country = am.Country.objects.filter(
+                    name__iexact=country.lower().strip())[0]
             else:
                 new_question.country = am.Country.objects.filter(name="Others")[0]
             if sub_category != "":
                 new_question.sub_category = am.SubCategory.objects.filter(
-                    name=sub_category)[0]
+                    name__iexact=sub_category.lower().strip())[0]
             else:
                 new_question.sub_category = am.SubCategory.objects.filter(
                     name="Others")[0]
