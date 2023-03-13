@@ -484,7 +484,7 @@ $(document).on("click", "#save_customer", function() {
 if (validate_form() == true)
     {
         data_dict = {
-            "action": "save_customer",
+            "function":"save_customer",
             "customer_name": $("#customer_name").val(),
             "customer_nationality": $("#customer_nationality").val(),
             "customer_id": $("#customer_id").val(),

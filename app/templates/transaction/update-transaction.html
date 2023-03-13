@@ -298,7 +298,7 @@ $(document).on("click", "#save_transaction", function() {
 if (validate_form() == true)
     {
         data_dict = {
-            "action": "save_transaction",
+            "function":"save_transaction",
             "transaction_type": $("#transaction_type").val(),
             "transaction_note": $("#transaction_note").val(),
             "transaction_currency": $("#transaction_currency").val(),
@@ -373,7 +373,7 @@ $(document).on('keyup', '.search_customer_input', function () {
 				iam.closest(".row").find(
 						".searched_customers").show();
 			}
-			data_dict = {"action": "get_my_customers", "initials": initials}
+			data_dict = {"function":"get_my_customers", "initials": initials}
 			$.ajax({
 			headers: { "X-CSRFToken": getCookie("csrftoken") },
 			type: 'POST',

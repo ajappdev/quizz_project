@@ -64,10 +64,10 @@ def landing_page(request):
             return redirect("administrator/dashboard/")
         if request.user.user_profile.role == "Student":
             return redirect("student/dashboard/")
-    else:
-        return redirect("quizz/")
+
+    template = "landing.html"
     context = {}
-    template = "blank.html"
+
     return render(request, template, context)
 
 
@@ -84,9 +84,19 @@ def dashboard_student(request):
     context = {}
     return render(request, template, context)
 
+
 def quizz(request):
     template = 'quizz/quizz.html'
-    context = {}
+    regions = am.Region.objects.all()
+    categories = am.Category.objects.all()
+    countries = am.Country.objects.all()
+    sub_categories = am.SubCategory.objects.all()
+
+    context = {
+        "regions": regions,
+        "categories": categories,
+        "countries": countries,
+        "sub_categories": sub_categories}
     return render(request, template, context)
 
 
@@ -239,19 +249,18 @@ def download_excel_template(request):
         response['Content-Disposition'] = 'attachment; filename=%s' % filename
         return response
 
-@login_required(login_url='login/')
 def ajax_calls(request):
 
     if request.method == 'POST':
         received_json_data = json.loads(request.body)
-        action = received_json_data['action']
+        function = received_json_data['function']
 
-        if action == "get_current_regions":
+        if function == "get_current_regions":
             current_regions = list(
                 am.Region.objects.all().values("id", "name"))
             data_dict = {"current_regions": current_regions}
 
-        elif action == "look_for_childs":
+        elif function == "look_for_childs":
             if received_json_data['what'] == "countries":
                 if received_json_data['parent'] == "":
                     childs = list(am.Country.objects.all().values("id", "name"))
@@ -270,7 +279,7 @@ def ajax_calls(request):
             data_dict = {"childs": childs}
 
 
-        elif action == "save_question_form":
+        elif function == "save_question_form":
 
             error_message = ""
             question_type = ""
@@ -296,12 +305,12 @@ def ajax_calls(request):
 
             data_dict = {"error_message": str(error_message)}
 
-        elif action == "get_current_categories":
+        elif function == "get_current_categories":
             current_categories = list(
                 am.Category.objects.all().values("id", "name"))
             data_dict = {"current_categories": current_categories}
 
-        elif action == "add_country":
+        elif function == "add_country":
             error = 0
             error_text = ""
             new_country_id = 0
@@ -328,7 +337,7 @@ def ajax_calls(request):
                 "error_text": error_text,
                 "new_country_id": new_country_id}
 
-        elif action == "delete_country":
+        elif function == "delete_country":
             error = 0
             error_text = ""
             try:
@@ -339,7 +348,7 @@ def ajax_calls(request):
                 error = 1
             data_dict = {"error": error, "error_text": error_text}
 
-        elif action == "update_country":
+        elif function == "update_country":
             error = 0
             error_text = ""
             if received_json_data['country_name'] != "":
@@ -361,7 +370,7 @@ def ajax_calls(request):
                 error = 1
             data_dict = {"error": error, "error_text": error_text}
 
-        elif action == "add_sub_category":
+        elif function == "add_sub_category":
             error = 0
             error_text = ""
             new_sub_category_id = 0
@@ -385,7 +394,7 @@ def ajax_calls(request):
                 "error_text": error_text,
                 "new_sub_category_id": new_sub_category_id}
 
-        elif action == "delete_sub_category":
+        elif function == "delete_sub_category":
             error = 0
             error_text = ""
             try:
@@ -396,7 +405,7 @@ def ajax_calls(request):
                 error = 1
             data_dict = {"error": error, "error_text": error_text}
 
-        elif action == "update_sub_category":
+        elif function == "update_sub_category":
             error = 0
             error_text = ""
             if received_json_data['sub_category_name'] != "":
@@ -417,7 +426,7 @@ def ajax_calls(request):
             else:
                 error_text = "Sub category name cannot be empty!"
                 error = 1
-        elif action == "add_region":
+        elif function == "add_region":
             error = 0
             error_text = ""
             new_region_id = 0
@@ -438,7 +447,7 @@ def ajax_calls(request):
                 "error_text": error_text,
                 "new_region_id": new_region_id}
 
-        elif action == "delete_question":
+        elif function == "delete_question":
             error = 0
             error_text = ""
             try:
@@ -449,7 +458,7 @@ def ajax_calls(request):
                 error = 1
             data_dict = {"error": error, "error_text": error_text}
 
-        elif action == "delete_region":
+        elif function == "delete_region":
             error = 0
             error_text = ""
             try:
@@ -460,7 +469,7 @@ def ajax_calls(request):
                 error = 1
             data_dict = {"error": error, "error_text": error_text}
 
-        elif action == "update_region":
+        elif function == "update_region":
             error = 0
             error_text = ""
             if received_json_data['region_name'] != "":
@@ -477,7 +486,7 @@ def ajax_calls(request):
 
             data_dict = {"error": error, "error_text": error_text}
 
-        elif action == "add_category":
+        elif function == "add_category":
             error = 0
             error_text = ""
             new_category_id = 0
@@ -499,7 +508,7 @@ def ajax_calls(request):
                 "error_text": error_text,
                 "new_category_id": new_category_id}
 
-        elif action == "delete_category":
+        elif function == "delete_category":
             error = 0
             error_text = ""
             try:
@@ -510,7 +519,7 @@ def ajax_calls(request):
                 error = 1
             data_dict = {"error": error, "error_text": error_text}
 
-        elif action == "update_category":
+        elif function == "update_category":
             error = 0
             error_text = ""
             if received_json_data['category_name'] != "":
@@ -527,7 +536,46 @@ def ajax_calls(request):
 
             data_dict = {"error": error, "error_text": error_text}
 
-        if action == "filter_questions_list":
+        elif function == "filter_questions_list_for_quizz":
+            
+            type_quizz = int(received_json_data['type_quizz'])
+            questions = am.Question.objects.all()
+            try:
+                questions = questions.filter(
+                    country__id=int(received_json_data['question_country']))
+            except Exception as e:
+                pass
+
+            try:
+                questions = questions.select_related("country").filter(
+                    country__region__id=int(
+                        received_json_data['question_region']))
+            except Exception as e:
+                pass
+
+            try:
+                questions = questions.filter(
+                    sub_category__id=int(
+                        received_json_data['question_sub_category']))
+            except Exception as e:
+                pass
+
+            try:
+                questions = questions.select_related("sub_category").filter(
+                    sub_category__category__id=int(
+                        received_json_data['question_category']))
+            except Exception as e:
+                pass
+
+            html = render_to_string(
+                        template_name="administrator/questions-table.html", 
+                        context={
+                            "questions": questions,
+                        }
+                    )
+            data_dict = {"html": html}
+
+        elif function == "filter_questions_list":
     
             question_keyword = received_json_data['question_keyword']
             question_type = received_json_data['question_type']
@@ -564,7 +612,6 @@ def ajax_calls(request):
                         received_json_data['question_category']))
             except Exception as e:
                 pass
-
 
             length_result = len(questions)
             questions_list = m00.pagination(page, 10, questions)

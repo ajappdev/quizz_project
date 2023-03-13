@@ -120,7 +120,7 @@ $(document).on("click", ".delete_transaction", function() {
     }).then((result) => {
         if (result.isConfirmed) {
             data_dict = {
-            "action": "delete_transaction",
+            "function":"delete_transaction",
             "transaction_id": transaction_id,
             }
             $.ajax({
@@ -201,7 +201,7 @@ function filter_results()
 {
 
     var data_dict = {
-        "action": "filter_transactions_list",
+        "function":"filter_transactions_list",
         "customer_name_or_id": $("#filter_name_customer").val(),
         "transaction_type": $("#filter_type_transaction").val(),
         "transaction_date": $("#filter_transaction_date").val(),

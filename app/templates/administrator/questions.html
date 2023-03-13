@@ -134,7 +134,7 @@ $(document).on("click", ".delete_question", function() {
     }).then((result) => {
         if (result.isConfirmed) {
             data_dict = {
-            "action": "delete_question",
+            "function":"delete_question",
             "question_id": question_id,
             }
             $.ajax({
@@ -208,7 +208,7 @@ $(document).on('click', '.next-page-liste', function() {
 $(document).on("change", "#filter_region_question", function() {
 
     var data_dict = {
-        "action": "look_for_childs",
+        "function":"look_for_childs",
         "what": "countries",
         "parent": $(this).val()}
 
@@ -238,7 +238,7 @@ $(document).on("change", "#filter_region_question", function() {
 $(document).on("change", "#filter_category_question", function() {
 
 var data_dict = {
-    "action": "look_for_childs",
+    "function":"look_for_childs",
     "what": "sub_categories",
     "parent": $(this).val()}
 
@@ -273,7 +273,7 @@ function filter_results()
 {
 
     var data_dict = {
-        "action": "filter_questions_list",
+        "function":"filter_questions_list",
         "question_keyword": $("#filter_keyword_question").val(),
         "question_type": $("#filter_type_question").val(),
         "question_country": $("#filter_country_question").val(),

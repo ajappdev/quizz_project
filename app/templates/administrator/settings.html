@@ -206,7 +206,7 @@ Swal.fire({
     if (result.isConfirmed) {
 
         data_dict = {
-            "action": "add_region", "region_name": $("#region_name_field").val().trim()
+            "function":"add_region", "region_name": $("#region_name_field").val().trim()
             }
             region_name_value = $("#region_name_field").val().trim()
             $.ajax({
@@ -278,7 +278,7 @@ cancelButtonText: translate_js('Cancel', "EN")
 if (result.isConfirmed) {
     region_name_field = $("#region_name_field").val().trim()
     data_dict = {
-        "action": "update_region", "region_name": region_name_field, "region_id": region_id
+        "function":"update_region", "region_name": region_name_field, "region_id": region_id
         }
         console.log(data_dict)
         $.ajax({
@@ -347,7 +347,7 @@ cancelButtonText: translate_js('Cancel', "EN")
 if (result.isConfirmed) {
 
     data_dict = {
-        "action": "delete_region", "region_id": region_id
+        "function":"delete_region", "region_id": region_id
         }
         console.log(data_dict)
         $.ajax({
@@ -417,7 +417,7 @@ Swal.fire({
     if (result.isConfirmed) {
 
         data_dict = {
-            "action": "add_country", "country_name": $("#country_name_field").val().trim(), "region_id": $("#country_region_field").val()
+            "function":"add_country", "country_name": $("#country_name_field").val().trim(), "region_id": $("#country_region_field").val()
             }
             country_name_value = $("#country_name_field").val().trim()
 
@@ -531,7 +531,7 @@ if (result.isConfirmed) {
     country_region_field = country_region_field.slice(0,-2)
     country_region_id = $("#country_region_field").val()
     data_dict = {
-        "action": "update_country", "country_name": country_name_field, "country_region": country_region_id, "country_id": country_id
+        "function":"update_country", "country_name": country_name_field, "country_region": country_region_id, "country_id": country_id
         }
         $.ajax({
         headers: {
@@ -605,7 +605,7 @@ cancelButtonText: translate_js('Cancel', "EN")
 if (result.isConfirmed) {
 
     data_dict = {
-        "action": "delete_country", "country_id": country_id
+        "function":"delete_country", "country_id": country_id
         }
         console.log(data_dict)
         $.ajax({
@@ -679,7 +679,7 @@ Swal.fire({
 }).then((result) => {
     if (result.isConfirmed) {
         data_dict = {
-            "action": "add_sub_category", "sub_category_name": $("#sub_category_name_field").val().trim(), "parent_category_id": $("#sub_category_parent_category_field").val()
+            "function":"add_sub_category", "sub_category_name": $("#sub_category_name_field").val().trim(), "parent_category_id": $("#sub_category_parent_category_field").val()
             }
             sub_category_name_value = $("#sub_category_name_field").val().trim()
 
@@ -781,7 +781,7 @@ if (result.isConfirmed) {
 
     sub_category_parent_category_id = $("#sub_category_parent_category_field").val()
     data_dict = {
-        "action": "update_sub_category", "sub_category_name": sub_category_name_field, "sub_category_parent_category": sub_category_parent_category_id, "sub_category_id": sub_category_id
+        "function":"update_sub_category", "sub_category_name": sub_category_name_field, "sub_category_parent_category": sub_category_parent_category_id, "sub_category_id": sub_category_id
         }
         console.log(data_dict)
         $.ajax({
@@ -855,7 +855,7 @@ cancelButtonText: translate_js('Cancel', "EN")
 if (result.isConfirmed) {
 
     data_dict = {
-        "action": "delete_sub_category", "sub_category_id": sub_category_id
+        "function":"delete_sub_category", "sub_category_id": sub_category_id
         }
         console.log(data_dict)
         $.ajax({
@@ -929,7 +929,7 @@ Swal.fire({
     if (result.isConfirmed) {
 
         data_dict = {
-            "action": "add_category", "category_name": $("#category_name_field").val().trim()
+            "function":"add_category", "category_name": $("#category_name_field").val().trim()
             }
             category_name_value = $("#category_name_field").val().trim()
             $.ajax({
@@ -1001,7 +1001,7 @@ cancelButtonText: translate_js('Cancel', "EN")
 if (result.isConfirmed) {
     category_name_field = $("#category_name_field").val().trim()
     data_dict = {
-        "action": "update_category", "category_name": category_name_field, "category_id": category_id
+        "function":"update_category", "category_name": category_name_field, "category_id": category_id
         }
         console.log(data_dict)
         $.ajax({
@@ -1070,7 +1070,7 @@ cancelButtonText: translate_js('Cancel', "EN")
 if (result.isConfirmed) {
 
     data_dict = {
-        "action": "delete_category", "category_id": category_id
+        "function":"delete_category", "category_id": category_id
         }
         console.log(data_dict)
         $.ajax({
@@ -1135,7 +1135,7 @@ function get_current_regions()
 {
     current_regions = ""
     data_dict = {
-            "action": "get_current_regions",
+            "function":"get_current_regions",
             }
             $.ajax({
             headers: {
@@ -1162,7 +1162,7 @@ function get_current_categories()
 {
     current_categories = ""
     data_dict = {
-            "action": "get_current_categories",
+            "function":"get_current_categories",
             }
             $.ajax({
             headers: {

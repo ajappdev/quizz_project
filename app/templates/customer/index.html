@@ -362,7 +362,7 @@ $(document).on("click", ".delete_customer", function() {
     }).then((result) => {
         if (result.isConfirmed) {
             data_dict = {
-            "action": "delete_customer",
+            "function":"delete_customer",
             "customer_id": customer_id,
             }
             $.ajax({
@@ -438,7 +438,7 @@ function filter_results()
 {
 
     var data_dict = {
-        "action": "filter_customers_list",
+        "function":"filter_customers_list",
         "customer_name_or_id": $("#filter_name_customer").val(),
         "customer_nationality": $("#filter_nationality").val(),
         "customer_type": $("#filter_type_customer").val(),

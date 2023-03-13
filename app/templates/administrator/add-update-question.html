@@ -134,7 +134,7 @@ $(document).on("click", "#save_question_button", function() {
     }
 
         data_dict = {
-            "action": "save_question_form",
+            "function":"save_question_form",
             "question_text": $("#add_question_field_question").val(),
             "question_country": $("#add_question_field_country option:selected").text(),
             "question_sub_category": $("#add_question_field_sub_category option:selected").text(),
