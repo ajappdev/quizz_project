@@ -21,6 +21,7 @@ dict_translate = [
     "Region successfully updated!",
     "Add category",
     "Update category",
+    "Not enough questions for the chosen criteria!",
     "Delete category",
     "Category successfully created!",
     "Category successfully deleted!",

@@ -140,6 +140,7 @@ class Choice(models.Model):
     def __str__(self):
         return self.choice
 
+
 class Answer(models.Model):
     """
     Here we store the right answers for questions
@@ -152,3 +153,24 @@ class Answer(models.Model):
 
     def __str__(self):
         return self.answer
+
+
+class Quizz(models.Model):
+    user = models.OneToOneField(
+        User, null=True, blank=True, on_delete=models.SET_NULL)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class QuestionQuizz(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class AnswerQuizz(models.Model):
+    question_quizz = models.ForeignKey(QuestionQuizz, on_delete=models.CASCADE)
+    answer = models.TextField()
+    good_answer = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

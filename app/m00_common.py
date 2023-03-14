@@ -16,6 +16,7 @@ def pagination(page: int, nbr_pag: int, liste_obj):
     obj = paginator.get_page(page)
     return obj
 
+
 def initial_settings():
     #CLEAN THE BASE
     am.Country.objects.filter(id__gte=0).delete()

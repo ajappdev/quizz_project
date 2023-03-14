@@ -7,13 +7,13 @@
 <div class="container">
 
 
-      <div class="filter-row row mb-3 mt-5">
-          <div class="card card-filter">
+      <div class="row mb-3 mt-5" id="filter-row">
+          <div class="card">
             <div class="card-body">
-                <h5 class="card-title p0p9">{% trans 'Filter' %}</h5>
+                <h5 style="color: #3b71ca; font-size: 1.4em; font-family: math; font-weight:600" class="card-title text-center mb-4">{% trans 'Please set up your <br> quizz by choosing your prefered criteria' %}</h5>
                 <div class="row">
                     <div class="col-lg-6 col-12 col-md-12 mb-3">
-                        <select id="filter_region_question" class="filter_input_change form-control">
+                        <select id="filter_region_question" style="height:100px; font-size:1.5em;" class="filter_input_change form-control">
                             <option value="">{% trans 'Region' %}</option>
                             {% for region in regions %}
                                 <option value="{{region.id|safe}}">{{region}}</option>
@@ -21,7 +21,7 @@
                         </select>
                     </div>
                     <div class="col-lg-6 col-12 col-md-12 mb-3">
-                        <select id="filter_country_question" class="filter_input_change form-control">
+                        <select id="filter_country_question" style="height:100px; font-size:1.5em;" class="filter_input_change form-control">
                             <option value="">{% trans 'Country' %}</option>
                             {% for country in countries %}
                                 <option value="{{country.id|safe}}">{{country}}</option>
@@ -29,7 +29,7 @@
                         </select>
                     </div>
                     <div class="col-lg-6 col-12 col-md-12 mb-3">
-                        <select id="filter_category_question" class="filter_input_change form-control">
+                        <select id="filter_category_question" style="height:100px; font-size:1.5em;" class="filter_input_change form-control">
                             <option value="">{% trans 'Category' %}</option>
                             {% for category in categories %}
                                 <option value="{{category.id|safe}}">{{category}}</option>
@@ -37,7 +37,7 @@
                         </select>
                     </div>
                     <div class="col-lg-6 col-12 col-md-12 mb-3">
-                        <select id="filter_sub_category_question" class="filter_input_change form-control">
+                        <select id="filter_sub_category_question" style="height:100px; font-size:1.5em;" class="filter_input_change form-control">
                             <option value="">{% trans 'Sub Category' %}</option>
                             {% for sub_category in sub_categories %}
                                 <option value="{{sub_category.id|safe}}">{{sub_category}}</option>
@@ -45,12 +45,19 @@
                         </select>
                     </div>
                 </div>
+                <div style="text-align: center;">
+                    <button id="generate_quizz_btn" class="btn btn-primary btn-lg mt-3">{% trans 'Generate Quizz' %}</button>
+                </div>
             </div>
           </div>
         </div>
     
     <div class="row mb-3">
-        <div id="table_questions"></div>
+        <div id="questions_quizz"></div>
+    </div>
+
+    <div class="row mb-3">
+        <div id="results_quizz"></div>
     </div>
 </div>
 
@@ -69,11 +76,6 @@
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
 
-$( document ).ready(function() {
-    
-    filter_results()
-    
-    });
 
 
 //////////////////////////////////////////////////////////
@@ -90,6 +92,19 @@ if (parseInt("{{request.user.id}}") > 0)
 {
     type_quizz = 2
 }
+
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+////////////////////////KEYUP EVENTS//////////////////////
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+
+$(document).on("keyup", ".textarea_free_text", function() {
+
+    $(this).closest(".question_card").find(".question_answer").val($(this).val())
+
+});
+
 
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
@@ -155,12 +170,21 @@ $(document).on("click", ".delete_question", function() {
 });
 
 
-$(document).on("change", ".filter_input_change", function() {
-    filter_results()
+$(document).on("click", "#generate_quizz_btn", function() {
+    $(this).html(
+        `<div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>`)
+    create_quizz()
 });
 
-$(document).on("keyup", ".filter_input", function() {
-    filter_results()
+
+$(document).on("click", "#submit_answers_button", function() {
+    $(this).html(
+        `<div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>`)
+    submit_answers()
 });
 
 
@@ -169,6 +193,13 @@ $(document).on("keyup", ".filter_input", function() {
 ////////////////////////CHANGE EVENTS//////////////////////
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
+
+form-check-input
+
+$(document).on("change", "#filter_region_question", function() {
+
+
+});
 
 $(document).on("change", "#filter_region_question", function() {
 
@@ -234,7 +265,59 @@ $.ajax({
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
 
-function filter_results()
+function submit_answers()
+{
+
+    questions_list = []
+    $( ".question_card" ).each(function( index ) {
+        question_element = {
+            "id": $(this).find(".question_id").text(),
+            "type": $(this).find(".question_type").text(),
+        }
+        questions_list.push()
+    });
+
+    var data_dict = {
+        "function":"submit_answers",
+        "type_quizz": type_quizz,
+        "user_id": "{{request.user.id|safe}}",
+    }
+
+    $.ajax({
+        headers: {
+            "X-CSRFToken": getCookie("csrftoken")
+        },
+        type: 'POST',
+        processData: false,
+        contentType: false,
+        url: "{% url 'ajax_calls' %}",
+        data: JSON.stringify(data_dict),
+        success: function(response) {
+            if (response['error_text'] == "")
+            {
+                $("#filter-row").hide()
+                $("#questions_quizz").hide()
+                $("#results_quizz").html(response["html"])
+            }else
+            {
+                Swal.fire({
+                        icon: 'error',
+                        title: translate_js('An error has occurred!', "EN"),
+                        text: response['error_text'],
+                        position: 'center',
+                        showConfirmButton: false,
+                    })
+            }
+
+    $("#generate_quizz_btn").html('<i class="fas fa-check"></i> {% trans "SUBMIT ANSWERS" %}')
+        
+    }
+})
+
+}
+
+
+function create_quizz()
 {
 
     var data_dict = {
@@ -256,9 +339,26 @@ function filter_results()
         url: "{% url 'ajax_calls' %}",
         data: JSON.stringify(data_dict),
         success: function(response) {
-            $("#table_questions").html(response["html"])
-        }
-    })
+            if (response['error_text'] == "")
+            {
+                $("#filter-row").hide()
+                $("#results_quizz").hide()
+                $("#questions_quizz").html(response["html"])
+            }else
+            {
+                Swal.fire({
+                        icon: 'error',
+                        title: translate_js('An error has occurred!', "EN"),
+                        text: response['error_text'],
+                        position: 'center',
+                        showConfirmButton: false,
+                    })
+            }
+
+    $("#generate_quizz_btn").html('{% trans "GENERATE QUIZZ" %}')
+        
+    }
+})
 }
 
 </script>

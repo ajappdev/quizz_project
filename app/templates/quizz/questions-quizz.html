@@ -1,0 +1,59 @@
+{% load i18n %}
+{% load humanize %}
+<div class="row mb-3 mt-5">
+    {% for question in questions %}
+    {% with question_n=forloop.counter %}  
+    <div class="question_card card mb-5">
+      <div class="card-body">
+          <h5 class="card-title">{% trans 'Question' %} N°{{forloop.counter}}</h5>
+          <span class="question_id hidden">{{question.id|safe}}</span>
+          <span class="question_type hidden">{{question.type}}</span>
+          <p class="question_quizz">{{question.question}}</p>
+          {% if question.type == 'Free Text' %}
+            <textarea class="form-control textarea_free_text" placeholder="{% trans 'Enter your answer here' %}"></textarea>
+          {% elif question.type == 'Multiple Choices' %} 
+            {% for choice in question.question_choices%}
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="flexRadioDefault{{question_n}}" id="flexRadioDefault{{question_n}}{{forloop.counter}}" value="{{choice.id|safe}}"/>
+                <label class="form-check-label" for="flexRadioDefault{{question_n}}{{forloop.counter}}"> {{choice.choice}} </label>
+            </div>
+            {% endfor %}
+          {% elif question.type == 'True or False' %} 
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="flexRadioDefault{{question_n}}" id="flexRadioDefault{{question_n}}1" value="True"/>
+                <label class="form-check-label" for="flexRadioDefault{{question_n}}1"> True </label>
+            </div>²
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="flexRadioDefault{{question_n}}" id="flexRadioDefault{{question_n}}2" value="False"/>
+                <label class="form-check-label" for="flexRadioDefault{{question_n}}2"> False </label>
+            </div>
+          {% endif %}
+          <input class="form-control question_answer hidden" type="text">
+      </div>
+    </div>
+    {% endwith %}
+    {% endfor %}
+    <div style="text-align:center;" class="mb-5">
+        <button id="submit_answers_button" class="btn btn-lg btn-success"><i class="fas fa-check"></i> {% trans 'SUBMIT ANSWERS' %}</button>
+    </div>
+  </div>
+
+
+  <style>
+
+
+.textarea_free_text
+{
+    resize: none;
+    height:80px;
+}
+
+.question_quizz
+{
+    background: #efeaea;
+    padding: 7px;
+    font-weight: 600;
+    font-size: 0.8em;
+}
+
+  </style>

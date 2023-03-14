@@ -539,6 +539,12 @@ def ajax_calls(request):
         elif function == "filter_questions_list_for_quizz":
             
             type_quizz = int(received_json_data['type_quizz'])
+            if type_quizz == 1:
+                nb_q = 10
+            elif type_quizz == 2:
+                nb_q = 5
+
+            error_text = ""
             questions = am.Question.objects.all()
             try:
                 questions = questions.filter(
@@ -567,13 +573,25 @@ def ajax_calls(request):
             except Exception as e:
                 pass
 
+            questions = questions.values_list('id', flat=True)
+
+            try:
+                import random
+                questions = random.sample(list(questions), min(len(questions), nb_q))
+                questions = am.Question.objects.filter(id__in=questions)
+            except Exception as e:
+                error_text = e
+
+            if len(questions) < nb_q:
+                error_text = "Not enough questions for the chosen criteria!"
+
             html = render_to_string(
-                        template_name="administrator/questions-table.html", 
+                        template_name="quizz/questions-quizz.html", 
                         context={
                             "questions": questions,
                         }
                     )
-            data_dict = {"html": html}
+            data_dict = {"html": html, "error_text": str(error_text)}
 
         elif function == "filter_questions_list":
     
